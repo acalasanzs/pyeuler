@@ -9,7 +9,9 @@ B = np.array([
     [0,0,0],
     [0,0,0],
     [1,1,1]])
-def complexity(matrix, nx=3, ny=3):
+def complexity(matrix):
+    nx = len(matrix[0])
+    ny = len(matrix)
     def tuplein(array,tup):
         def isall(a,b):
             for i,j in enumerate(a):
