@@ -46,19 +46,39 @@ class c:
     def __init__(self, n, k):
         self.n = n
         self.k = k
-        self.matrix = np.zeros(self.n,self.n)
-        for one in range(self.k):
+        self.matrix = np.zeros((self.n,self.n))
+        for _ in range(self.k):
             self.addOne()
+        print(self.matrix)
     def addOne(self):
+        print("yey")
         temp = []
-        begin = False
-        for column in self.n:
-            for row in self.n:
-                if not begin:
-                    temp = np.copy(self.matrix)
-                    temp[column][row] == 1
-                    self.matrix[column][row] == 1
-                    begin = True
+        temp = np.copy(self.matrix)
+        for column in range(self.n):
+            for row in range(self.n):
+                if temp[column][row] == 0:
+                    temp[column][row] = 1
+                    current_complexity = len(complexity(temp))
+                    if current_complexity > len(complexity(self.matrix)):
+                        if row < self.n-1:
+                            if temp[column][row+1] == 1:
+                                self.matrix[column][row] = 1
+                                temp = np.copy(self.matrix)
+                                break
+                            else:
+                                if column == 0 and row == 0:
+                                    self.matrix[column][row] = 1
+                                    temp = np.copy(self.matrix)
+                                    return
+                            #   self.matrix[column][row] = 0
+                        else:
+                            self.matrix[column][row] = 1
+                            temp = np.copy(self.matrix)
+                            return
+                        continue
                 else:
-                    temp[column][row] == 1
-                    if complexity(temp) > complexity(self.matrix)
+                    self.matrix[column][row] = 1
+                    temp = np.copy(self.matrix)
+                    return
+
+a = c(2,1)
