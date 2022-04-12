@@ -3,8 +3,8 @@ from itertools import combinations
 import numpy as np
 A = np.array([
     [1,0,1],
-    [0,1,0],
-    [1,1,1]])
+    [0,0,0],
+    [1,0,1]])
 B = np.array([
     [0,0,0],
     [0,0,0],
@@ -30,11 +30,10 @@ def complexity(matrix, nx=3, ny=3):
         combinations = []
         if matrix.shape == (nx,ny):
             for nr in matrix:
-                if not(tuplein(matrix,tuple(nr))):
+                if not(tuplein(combinations,tuple(nr))):
                    combinations.append(nr)
             for nc in columns(matrix):
-                print(nc)
-                if not(tuplein(matrix,tuple(nc))):
+                if not(tuplein(combinations,tuple(nc))):
                     combinations.append(nc)
             return len(combinations)
         else:
