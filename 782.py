@@ -37,9 +37,28 @@ def complexity(matrix):
             for nc in columns(matrix):
                 if not(tuplein(combinations,tuple(nc))):
                     combinations.append(nc)
-            return len(combinations)
+            return combinations
         else:
             return None
     else:
         raise "not ndarray"
-print(complexity(A))
+class c:
+    def __init__(self, n, k):
+        self.n = n
+        self.k = k
+        self.matrix = np.zeros(self.n,self.n)
+        for one in range(self.k):
+            self.addOne()
+    def addOne(self):
+        temp = []
+        begin = False
+        for column in self.n:
+            for row in self.n:
+                if not begin:
+                    temp = np.copy(self.matrix)
+                    temp[column][row] == 1
+                    self.matrix[column][row] == 1
+                    begin = True
+                else:
+                    temp[column][row] == 1
+                    if complexity(temp) > complexity(self.matrix)
