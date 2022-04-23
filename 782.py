@@ -41,7 +41,7 @@ def complexity(matrix):
         else:
             return None
     else:
-        raise "not ndarray"
+        raise "not a ndarray"
 class c:
     def __init__(self, n, k):
         self.n = n
@@ -51,34 +51,35 @@ class c:
             self.addOne()
         print(self.matrix)
     def addOne(self):
+        class point:
+            def __init__(self, x, y, complex):
+                self.x = x
+                self.y = y
+                self.complex = complex
         print("yey")
         temp = []
         temp = np.copy(self.matrix)
-        for column in range(self.n):
-            for row in range(self.n):
-                if temp[column][row] == 0:
-                    temp[column][row] = 1
-                    current_complexity = len(complexity(temp))
-                    if current_complexity > len(complexity(self.matrix)):
-                        if row < self.n-1:
-                            if temp[column][row+1] == 1:
-                                self.matrix[column][row] = 1
-                                temp = np.copy(self.matrix)
-                                break
-                            else:
-                                if column == 0 and row == 0:
-                                    self.matrix[column][row] = 1
-                                    temp = np.copy(self.matrix)
-                                    return
-                            #   self.matrix[column][row] = 0
-                        else:
-                            self.matrix[column][row] = 1
-                            temp = np.copy(self.matrix)
-                            return
-                        continue
-                else:
-                    self.matrix[column][row] = 1
-                    temp = np.copy(self.matrix)
-                    return
+        mininum = []
+        x = 0
+        y = 0
+        while True:
+            if x == self.n:
+                x = 0
+                if y < self.n - 1:
+                    y += 1
+            if temp[x][y] == 0:
+                temp[x][y] = 1
+                current_complexity = len(complexity(temp))
+                point1 = point(x, y, current_complexity)
+                mininum.append(point1)
+            if x == (self.n - 1) and y == (self.n - 1):
+                break
+            x += 1
+        min = mininum[0]
+        for co in mininum:
+            if co.complex < min.complex:
+                min = co
+        mininum = min
+        self.matrix[mininum.x][mininum.y] = 1
 
-a = c(2,1)
+a = c(2,4)
