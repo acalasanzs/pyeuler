@@ -10,7 +10,7 @@ B = np.array([
     [0,0,0],
     [0,0,0],
     [1,1,1]])
-def complexity(matrix):
+def complexity0(matrix):
     nx = len(matrix[0])
     ny = len(matrix)
     def tuplein(array,tup):
@@ -37,6 +37,38 @@ def complexity(matrix):
                    combinations.append(nr)
             for nc in columns(matrix):
                 if not(tuplein(combinations,tuple(nc))):
+                    combinations.append(nc)
+            return combinations
+        else:
+            return None
+    else:
+        raise "not a ndarray"
+def complexity(matrix):
+    n = len(matrix)
+    def setin(array,arr):
+        def same(a1,a2):
+            for idx, a in enumerate(a1):
+                if not(a == a2[idx]):
+                    return False
+            return True
+        for a in array:
+            if same(a,arr):
+                return True
+        return False
+    def columns(array):
+        t = [[] for _ in array[0]]
+        for column,i in enumerate(array[0]):
+            for row in range(len(array)):
+                t[column].append(array[row][column])
+        return t
+    if type(matrix) is np.ndarray:
+        combinations = []
+        if matrix.shape == (n, n):
+            for nr in matrix:
+                if not(setin(combinations,nr)):
+                   combinations.append(nr)
+            for nc in columns(matrix):
+                if not(setin(combinations,nc)):
                     combinations.append(nc)
             return combinations
         else:
