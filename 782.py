@@ -67,8 +67,8 @@ class c:
                 x = 0
                 if y < self.n - 1:
                     y += 1
-            if temp[y][x] == 0:
-                temp[y][x] = 1
+            if temp[x][y] == 0:
+                temp[x][y] = 1
                 current_complexity = len(complexity(temp))
                 point1 = point(x, y, current_complexity)
                 mininum.append(point1)
@@ -78,17 +78,15 @@ class c:
         mini = [co.complex for co in mininum]
         minI = mini.index(min(mini))
         mininum = mininum[minI]
-        print(mininum.x, mininum.y)
-        self.matrix[mininum.y][mininum.x] = 1
+        self.matrix[mininum.x][mininum.y] = 1
     def get_complexity(self):
         return len(complexity(self.matrix))
 
 def C(n):
     sum = 0
     for a in range(int(math.pow(n,2)+1)):
+        print("-")
         sum += c(n,a).get_complexity()
     return sum
 
-# print(C(2))
-a = c(2,2)
-print(a.matrix)
+print(C(2))
