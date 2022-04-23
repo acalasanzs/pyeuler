@@ -1,5 +1,6 @@
 import enum
 from itertools import combinations
+import math
 import numpy as np
 A = np.array([
     [1,0,1],
@@ -49,37 +50,45 @@ class c:
         self.matrix = np.zeros((self.n,self.n))
         for _ in range(self.k):
             self.addOne()
-        print(self.matrix)
     def addOne(self):
         class point:
             def __init__(self, x, y, complex):
                 self.x = x
                 self.y = y
                 self.complex = complex
-        print("yey")
         temp = []
         temp = np.copy(self.matrix)
         mininum = []
         x = 0
         y = 0
         while True:
+            temp = np.copy(self.matrix)
             if x == self.n:
                 x = 0
                 if y < self.n - 1:
                     y += 1
-            if temp[x][y] == 0:
-                temp[x][y] = 1
+            if temp[y][x] == 0:
+                temp[y][x] = 1
                 current_complexity = len(complexity(temp))
                 point1 = point(x, y, current_complexity)
                 mininum.append(point1)
             if x == (self.n - 1) and y == (self.n - 1):
                 break
             x += 1
-        min = mininum[0]
-        for co in mininum:
-            if co.complex < min.complex:
-                min = co
-        mininum = min
-        self.matrix[mininum.x][mininum.y] = 1
+        mini = [co.complex for co in mininum]
+        minI = mini.index(min(mini))
+        mininum = mininum[minI]
+        print(mininum.x, mininum.y)
+        self.matrix[mininum.y][mininum.x] = 1
+    def get_complexity(self):
+        return len(complexity(self.matrix))
 
-a = c(2,4)
+def C(n):
+    sum = 0
+    for a in range(int(math.pow(n,2)+1)):
+        sum += c(n,a).get_complexity()
+    return sum
+
+# print(C(2))
+a = c(2,2)
+print(a.matrix)
