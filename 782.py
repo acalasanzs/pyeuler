@@ -46,13 +46,8 @@ def complexity0(matrix):
 def complexity(matrix):
     n = len(matrix)
     def setin(array,arr):
-        def same(a1,a2):
-            for idx, a in enumerate(a1):
-                if not(a == a2[idx]):
-                    return False
-            return True
         for a in array:
-            if same(a,arr):
+            if np.array_equal(a,arr):
                 return True
         return False
     def columns(array):
@@ -68,8 +63,8 @@ def complexity(matrix):
                 if not(setin(combinations,nr)):
                    combinations.append(nr)
             for nc in columns(matrix):
-                if not(setin(combinations,nc)):
-                    combinations.append(nc)
+                if not(setin(combinations,nc[::-1])):
+                    combinations.append(nc[::-1])
             return combinations
         else:
             return None
@@ -117,7 +112,7 @@ class c:
 def C(n):
     sum = 0
     for a in range(int(math.pow(n,2)+1)):
-        print("-")
+        print(c(n,a).get_complexity())
         sum += c(n,a).get_complexity()
     return sum
 
