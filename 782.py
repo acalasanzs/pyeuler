@@ -90,8 +90,9 @@ class c:                                                #Create and object which
 def C(n):
     sum = 0
     for a in range(int(math.pow(n,2)+1)):
-        print(c(n,a).matrix)
-        sum += c(n,a).get_complexity()
+        bin = c(n,a)
+        print(bin.get_complexity())
+        sum += bin.get_complexity()
     return sum
 
 print(C(2))
