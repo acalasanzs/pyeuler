@@ -1,6 +1,7 @@
 """
 Made with love by Albert Calasanz Sallen in Python 3
 """
+import itertools
 import math
 import numpy as np
 
@@ -53,8 +54,7 @@ class c:                                                #Create and object which
         self.n = n
         self.k = k
         self.matrix = np.zeros((self.n,self.n))         #Initialize the void (n, n) matrix
-        for _ in range(self.k):                         #Add as ones as are required
-            self.addOne()
+        self.draw()
     def addOne(self):
         class point:                                    #Make an object which contains the point of a posible combination with its matrix complexity
             def __init__(self, x, y, complex):
@@ -84,20 +84,62 @@ class c:                                                #Create and object which
         minI = mini.index(min(mini))
         mininum = mininum[minI]
         self.matrix[mininum.x][mininum.y] = 1
+    def draw(self):
+        cx = [0 for _ in range(self.k)]
+        cy = [0 for _ in range(self.k)]
+        def addOnes():
+            current = 0
+            x = 0
+            y = 0
+            while True:
+                if current > self.k - 1:
+                    break
+                if x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+                    x = 0
+                    if y < self.n - 1:
+                        y += 1
+                    else:
+                        break 
+                if x == cx[current] and y == cy[current]:
+                    self.matrix[x][y] = 1
+                    current += 1
+        min_map = []                                       #Min Map Values
+        posible_permutations = list(itertools.permutations(range(self.n), 2))   #All permutations without repeated numbers
+        posible_permutations_x = [a[0] for a in posible_permutations]           #All x values of permutations
+        for i in range(self.n):
+            if i == 0:
+                posible_permutations.insert(posible_permutations_x.index(i), tuple([i for _ in range(2)]))
+            else:
+                posible_permutations.insert(posible_permutations_x.index(i)+1, tuple([i for _ in range(2)]))
+            posible_permutations_x = [a[0] for a in posible_permutations]
+        print(posible_permutations)
+        while False:                                        #Bruteforce tryhard
+            addOnes()
+            min_map.append(len(complexity(self.matrix)))    #Append the current complexity
+
+            self.matrix = np.zeros((self.n,self.n))         #Void (n, n) matrix
+            for idx, permutation in enumerate(posible_permutations):
+                cx[idx] = permutation[0]
+                cy[idx] = permutation[1]
+
+
     def get_complexity(self):
         return len(complexity(self.matrix))
 
 def C(n):
     sum = 0
     for a in range(int(math.pow(n,2)+1)):
-        bin = c(n,a)
-        print(bin.get_complexity())
-        sum += bin.get_complexity()
+        bin_m = c(n,a)
+        print(bin_m.get_complexity())
+        sum += bin_m.get_complexity()
     return sum
 
-print(C(2))
+#print(C(2))
+bin_m = c(2,3)
 
+"""
 print( complexity( np.array([
     [1, 0],
     [1, 1]
 ])))
+"""
