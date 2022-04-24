@@ -1,7 +1,10 @@
-import enum
-from itertools import combinations
+"""
+Made with love by Albert Calasanz Sallen in Python 3
+"""
 import math
 import numpy as np
+
+# Example binary matrices
 A = np.array([
     [1,0,1],
     [0,0,0],
@@ -10,64 +13,39 @@ B = np.array([
     [0,0,0],
     [0,0,0],
     [1,1,1]])
-def complexity0(matrix):
-    nx = len(matrix[0])
-    ny = len(matrix)
-    def tuplein(array,tup):
-        def isall(a,b):
-            for i,j in enumerate(a):
-                if not(j == b[i]):
-                    return False
-            return True
-        for i in array:
-            if isall(i,tup):
-                return True
-        return False
-    def columns(array):
-        t = [[] for _ in array[0]]
-        for column,i in enumerate(array[0]):
-            for row in range(len(array)):
-                t[column].append(array[row][column])
-        return t
-    if type(matrix) is np.ndarray:
-        combinations = []
-        if matrix.shape == (nx,ny):
-            for nr in matrix:
-                if not(tuplein(combinations,tuple(nr))):
-                   combinations.append(nr)
-            for nc in columns(matrix):
-                if not(tuplein(combinations,tuple(nc))):
-                    combinations.append(nc)
-            return combinations
-        else:
-            return None
-    else:
-        raise "not a ndarray"
+
+# Complexity binary matrix calculator
 def complexity(matrix):
-    n = len(matrix)
+    n = len(matrix)                                     #matrix size, as a 0-cube (square)
+
+    #calculates if there is a match for arrays inside an array
     def setin(array,arr):
         for a in array:
             if np.array_equal(a,arr):
                 return True
         return False
+    
+    #returns de columns as an 2d array (such as a rerversed 2D matrix)
     def columns(array):
-        t = [[] for _ in array[0]]
-        for column,i in enumerate(array[0]):
-            for row in range(len(array)):
-                t[column].append(array[row][column])
+        t = [[] for _ in array[0]]                      #Prepares a void 2d array
+        for column,i in enumerate(array[0]):            #For each column index
+            for row in range(len(array)):               #For each row
+                t[column].append(array[row][column])    #Append to current value to the current column index
         return t
-    if type(matrix) is np.ndarray:
-        combinations = []
-        if matrix.shape == (n, n):
-            for nr in matrix:
-                if not(setin(combinations,nr)):
-                   combinations.append(nr)
-            for nc in columns(matrix):
-                if not(setin(combinations,nc[::-1])):
-                    combinations.append(nc[::-1])
-            return combinations
+
+    #Here comes the work
+    if type(matrix) is np.ndarray:                      #check if It's a 2d np matrix
+        combinations = []                               #Save a void combinations array
+        if matrix.shape == (n, n):                      #check if is a square matrix
+            for nr in matrix:                           #For each row
+                if not(setin(combinations,nr)):         #If not a combination match in combiantions array for the current found combination
+                   combinations.append(nr)              #Add combination to the list
+            for nc in columns(matrix):                  #For each column
+                if not(setin(combinations,nc)):         #If not a combination match in combiantions array for the current found combination
+                    combinations.append(nc)             #Add combination to the list
+            return combinations                         #When ends return the result
         else:
-            return None
+            raise "not a ndarray"
     else:
         raise "not a ndarray"
 class c:
@@ -112,8 +90,13 @@ class c:
 def C(n):
     sum = 0
     for a in range(int(math.pow(n,2)+1)):
-        print(c(n,a).get_complexity())
+        print(c(n,a).matrix)
         sum += c(n,a).get_complexity()
     return sum
 
 print(C(2))
+
+print( complexity( np.array([
+    [1, 0],
+    [1, 1]
+])))
