@@ -136,16 +136,14 @@ class c:                                                #Create and object which
             for_loop_2 += 1         
 
         self.matrix = matrix
-
-    def get_complexity(self):
-        return len(complexity(self.matrix))
+        self.complexity = min_val[0]
 
 def C(n):
     sum = 0
     for a in range(int(math.pow(n,2)+1)):
         print(a, int(math.pow(n,2)+1))
         bin_m = c(n,a)
-        sum += bin_m.get_complexity()
+        sum += bin_m.complexity
     return sum
 
 print(C(5))
