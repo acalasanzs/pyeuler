@@ -151,13 +151,14 @@ class c:                                                #Create and object which
 def C(n):
     sum = 0
     for a in range(int(math.pow(n,2)+1)):
+        print(a, int(math.pow(n,2)+1))
         bin_m = c(n,a)
-        print(bin_m.get_complexity())
         sum += bin_m.get_complexity()
     return sum
 
-print(C(2))
-
+#print(C(5))
+bi = c(5,3)
+print( bi.get_complexity())
 """
 print( complexity( np.array([
     [1, 0],
