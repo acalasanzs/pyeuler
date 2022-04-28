@@ -3,6 +3,7 @@ Made with love by Albert Calasanz Sallen in Python 3
 """
 import itertools
 import math
+from turtle import position
 import numpy as np
 
 # Example binary matrices
@@ -87,23 +88,12 @@ class c:                                                #Create and object which
     def draw(self):
         cx = [0 for _ in range(self.k)]
         cy = [0 for _ in range(self.k)]
-        def addOnes():
-            current = 0
-            x = 0
-            y = 0
-            while True:
-                if current > self.k - 1:
-                    break
-                if x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
-                    x = 0
-                    if y < self.n - 1:
-                        y += 1
-                    else:
-                        break 
-                if x == cx[current] and y == cy[current]:
-                    self.matrix[x][y] = 1
-                    current += 1
         min_map = []                                       #Min Map Values
+        class matrix:                                    #Make an object which contains the point of a posible combination with its matrix
+            def __init__(self, matrix):
+                self.matrix = matrix
+                self.complex = len(complexity(matrix))
+        # Get Positions
         posible_permutations = list(itertools.permutations(range(self.n), 2))   #All permutations without repeated numbers
         posible_permutations_x = [a[0] for a in posible_permutations]           #All x values of permutations
         for i in range(self.n):
@@ -112,15 +102,47 @@ class c:                                                #Create and object which
             else:
                 posible_permutations.insert(posible_permutations_x.index(i)+1, tuple([i for _ in range(2)]))
             posible_permutations_x = [a[0] for a in posible_permutations]
-        print(posible_permutations)
-        while False:                                        #Bruteforce tryhard
-            addOnes()
-            min_map.append(len(complexity(self.matrix)))    #Append the current complexity
-
+        
+        #Update positions
+        def updatePositions():
             self.matrix = np.zeros((self.n,self.n))         #Void (n, n) matrix
-            for idx, permutation in enumerate(posible_permutations):
-                cx[idx] = permutation[0]
-                cy[idx] = permutation[1]
+            for idx, x in enumerate(cx): 
+                self.matrix[cx[idx]][cy[idx]] = 1
+        
+        def updateCxCy(permutation):
+            for idx, position in enumerate(permutation):
+                cx[idx] = position[0]
+                cy[idx] = position[1]
+        posible_positions_permutations = list(itertools.permutations(posible_permutations,self.k))
+        def checkRepeated(perm):
+            t = [z for z in perm]
+            for posibility in perm:
+                t.remove(posibility)
+                for pos in t:
+                    if(len(posibility)==len(pos) and len(posibility)==sum([1 for i,j in zip(posibility,pos) if i==j])):
+                        perm.remove(posibility)
+            return False
+        checkRepeated(posible_positions_permutations)
+                    
+        for idx, permutation in enumerate(posible_positions_permutations):
+            updateCxCy(permutation)
+            updatePositions()
+            if idx > 0:
+                def thereSTable():
+                    for table in [co.matrix for co in min_map]:
+                        if np.array_equal(table, self.matrix):
+                            return True
+                if thereSTable():
+                    continue
+                min_map.append(matrix(self.matrix))    #Append the current complexity
+            else:
+                min_map.append(matrix(self.matrix))    #Append the current complexity
+        
+        mini = [co.complex for co in min_map]
+        minI = mini.index(min(mini))
+        mininum = min_map[minI].matrix
+
+        self.matrix = mininum           
 
 
     def get_complexity(self):
