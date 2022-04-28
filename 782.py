@@ -156,8 +156,7 @@ def C(n):
         sum += bin_m.get_complexity()
     return sum
 
-#print(C(2))
-bin_m = c(2,3)
+print(C(2))
 
 """
 print( complexity( np.array([
