@@ -3,7 +3,6 @@ Made with love by Albert Calasanz Sallen in Python 3
 """
 import itertools
 import math
-from turtle import position
 import numpy as np
 
 # Example binary matrices
@@ -15,7 +14,6 @@ B = np.array([
     [0,0,0],
     [0,0,0],
     [1,1,1]])
-
 # Complexity binary matrix calculator
 def complexity(matrix):
     n = len(matrix)                                     #matrix size, as a 0-cube (square)
@@ -88,8 +86,11 @@ class c:                                                #Create and object which
     def draw(self):
         cx = [0 for _ in range(self.k)]
         cy = [0 for _ in range(self.k)]
-        matrix = None
-        min_val = [None, 0]
+        mininum = []
+        class matrix:
+            def __init__(self, matrix):
+                self.matrix = matrix
+                self.complexity = len(complexity(matrix))
         # Get Positions
         posible_permutations = itertools.permutations(range(self.n), 2)         #All permutations without repeated numbers
         r_tuples = []
@@ -99,7 +100,7 @@ class c:                                                #Create and object which
         #Update positions
         def updatePositions():
             self.matrix = np.zeros((self.n,self.n))         #Void (n, n) matrix
-            for idx in range(len(cx)): 
+            for idx in range(len(cx)):
                 self.matrix[cx[idx]][cy[idx]] = 1
         
         def updateCxCy(permutation):
@@ -124,18 +125,21 @@ class c:                                                #Create and object which
                     voids.append([x,y])
                 x += 1
             return voids
-        def posiblePosition():
-            perm = []
-            idx = 0
-            for k_number in posible_permutations:
-                if idx == self.k:
-                    break
-                perm.append(k_number)
-                idx += 1
-            updateCxCy(perm)
-            updatePositions()
-            print(void_finder())
-        posiblePosition()
+        def change_position():
+            x = 0
+            y = 0
+            for _ in range(self.k):
+                self.addOne()
+                print(self.matrix,len(complexity(self.matrix)))
+            while True:
+                if x == self.n:
+                    x = 0
+                    if y < self.n - 1:
+                        y += 1
+                    else:
+                        break 
+                x += 1
+        change_position()
             
 
 """ def C(n):
