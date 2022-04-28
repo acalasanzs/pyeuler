@@ -99,7 +99,7 @@ class c:                                                #Create and object which
         #Update positions
         def updatePositions():
             self.matrix = np.zeros((self.n,self.n))         #Void (n, n) matrix
-            for idx, x in enumerate(cx): 
+            for idx in range(len(cx)): 
                 self.matrix[cx[idx]][cy[idx]] = 1
         
         def updateCxCy(permutation):
@@ -108,37 +108,37 @@ class c:                                                #Create and object which
                 cx[idx] = position[0]
                 cy[idx] = position[1]
                 idx +=1
-        posible_positions_permutations = itertools.permutations(posible_permutations,self.k)
-
-        """ def checkRepeated(perm):
-            t = [z for z in perm]
-            for posibility in perm:
-                t.remove(posibility)
-                for pos in t:
-                    if(len(posibility)==len(pos) and len(posibility)==sum([1 for i,j in zip(posibility,pos) if i==j])):
-                        perm.remove(posibility)
-            return False
-        checkRepeated(posible_positions_permutations) """
-
-        for_loop_2 = 0            
-        for permutation in posible_positions_permutations:
-            updateCxCy(permutation)
+        def void_finder():
+            voids = []
+            x = 0
+            y = 0
+            while True:
+                if x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+                    x = 0
+                    if y < self.n - 1:
+                        y += 1
+                    else:
+                        break 
+                #The code
+                if self.matrix[x][y] == 0:
+                    voids.append([x,y])
+                x += 1
+            return voids
+        def posiblePosition():
+            perm = []
+            idx = 0
+            for k_number in posible_permutations:
+                if idx == self.k:
+                    break
+                perm.append(k_number)
+                idx += 1
+            updateCxCy(perm)
             updatePositions()
-            if for_loop_2 > 0:
-                temporal = len(complexity(self.matrix))
-                if temporal < min_val[0]:
-                    min_val[0] = temporal
-                    matrix = self.matrix
-            else:
-                min_val[0] = len(complexity(self.matrix))
-                matrix = self.matrix
-            min_val[1] += 1
-            for_loop_2 += 1         
+            print(void_finder())
+        posiblePosition()
+            
 
-        self.matrix = matrix
-        self.complexity = min_val[0]
-
-def C(n):
+""" def C(n):
     sum = 0
     for a in range(int(math.pow(n,2)+1)):
         print(a, int(math.pow(n,2)+1))
@@ -146,7 +146,9 @@ def C(n):
         sum += bin_m.complexity
     return sum
 
-print(C(5))
+print(C(5)) """
+a = c(5,3)
+
 """
 print( complexity( np.array([
     [1, 0],
