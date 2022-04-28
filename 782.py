@@ -88,21 +88,14 @@ class c:                                                #Create and object which
     def draw(self):
         cx = [0 for _ in range(self.k)]
         cy = [0 for _ in range(self.k)]
-        min_map = []                                       #Min Map Values
-        class matrix:                                    #Make an object which contains the point of a posible combination with its matrix
-            def __init__(self, matrix):
-                self.matrix = matrix
-                self.complex = len(complexity(matrix))
+        matrix = None
+        min_val = [None, 0]
         # Get Positions
-        posible_permutations = list(itertools.permutations(range(self.n), 2))   #All permutations without repeated numbers
-        posible_permutations_x = [a[0] for a in posible_permutations]           #All x values of permutations
+        posible_permutations = itertools.permutations(range(self.n), 2)         #All permutations without repeated numbers
+        r_tuples = []
         for i in range(self.n):
-            if i == 0:
-                posible_permutations.insert(posible_permutations_x.index(i), tuple([i for _ in range(2)]))
-            else:
-                posible_permutations.insert(posible_permutations_x.index(i)+1, tuple([i for _ in range(2)]))
-            posible_permutations_x = [a[0] for a in posible_permutations]
-        
+            r_tuples.append(tuple([i for _ in range(2)]))
+        posible_permutations = itertools.chain(r_tuples,posible_permutations)
         #Update positions
         def updatePositions():
             self.matrix = np.zeros((self.n,self.n))         #Void (n, n) matrix
@@ -110,11 +103,14 @@ class c:                                                #Create and object which
                 self.matrix[cx[idx]][cy[idx]] = 1
         
         def updateCxCy(permutation):
-            for idx, position in enumerate(permutation):
+            idx = 0
+            for position in permutation:
                 cx[idx] = position[0]
                 cy[idx] = position[1]
-        posible_positions_permutations = list(itertools.permutations(posible_permutations,self.k))
-        def checkRepeated(perm):
+                idx +=1
+        posible_positions_permutations = itertools.permutations(posible_permutations,self.k)
+
+        """ def checkRepeated(perm):
             t = [z for z in perm]
             for posibility in perm:
                 t.remove(posibility)
@@ -122,28 +118,24 @@ class c:                                                #Create and object which
                     if(len(posibility)==len(pos) and len(posibility)==sum([1 for i,j in zip(posibility,pos) if i==j])):
                         perm.remove(posibility)
             return False
-        checkRepeated(posible_positions_permutations)
-                    
-        for idx, permutation in enumerate(posible_positions_permutations):
+        checkRepeated(posible_positions_permutations) """
+
+        for_loop_2 = 0            
+        for permutation in posible_positions_permutations:
             updateCxCy(permutation)
             updatePositions()
-            if idx > 0:
-                def thereSTable():
-                    for table in [co.matrix for co in min_map]:
-                        if np.array_equal(table, self.matrix):
-                            return True
-                if thereSTable():
-                    continue
-                min_map.append(matrix(self.matrix))    #Append the current complexity
+            if for_loop_2 > 0:
+                temporal = len(complexity(self.matrix))
+                if temporal < min_val[0]:
+                    min_val[0] = temporal
+                    matrix = self.matrix
             else:
-                min_map.append(matrix(self.matrix))    #Append the current complexity
-        
-        mini = [co.complex for co in min_map]
-        minI = mini.index(min(mini))
-        mininum = min_map[minI].matrix
+                min_val[0] = len(complexity(self.matrix))
+                matrix = self.matrix
+            min_val[1] += 1
+            for_loop_2 += 1         
 
-        self.matrix = mininum           
-
+        self.matrix = matrix
 
     def get_complexity(self):
         return len(complexity(self.matrix))
@@ -156,9 +148,7 @@ def C(n):
         sum += bin_m.get_complexity()
     return sum
 
-#print(C(5))
-bi = c(5,3)
-print( bi.get_complexity())
+print(C(5))
 """
 print( complexity( np.array([
     [1, 0],
