@@ -124,18 +124,47 @@ class MatrixIterator:
     def __init__(self, n, k):
         self.n = n                                      #B-Matrix's size
         self.k = k                                      #B-Matrix's ones
-        self.matrix = np.zeros((n, n))
         self.cpositions = [BiPosition(self.n, i) for i in range(self.k)]
+        self._current_position = 0
         self._index = 0
     def __next__(self):
+        self.matrix = np.zeros((self.n, self.n))         #Void (n, n) matrix
+        def update():
+            for idx in range(len(self.cpositions)):
+                self.matrix[self.cpositions[idx][0]][self.cpositions[idx][1]] = 1
+        def next_void():
+            x = 0
+            y = 0
+            counter = 0
+            while True:
+                if x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+                    x = 0
+                    if y < self.n - 1:
+                        y += 1
+                    else:
+                        break 
+                #The code
+                if self.matrix[x][y] == 0:
+                    return counter
+                counter += 1
+                x += 1
+        if self._index == 0:
+            update()
+        else:
+            print(self.cpositions[self._current_position][next_void()])
         self._index += 1
-        return self._index
+        return self.matrix
     def __iter__(self):
         return self
 
 
 proof = MatrixIterator(5,3)
-
+proof_counter = 0
+for i in proof:
+    if proof_counter > 5:
+        break
+    print(i)
+    proof_counter += 1
 class c:                                                #Create and object which will be used for contain all the values and its matrix in itself
     def __init__(self, n, k):
         self.n = n
@@ -239,7 +268,7 @@ class c:                                                #Create and object which
     return sum
 
 print(C(5)) """
-a = c(5,3)
+# a = c(5,3)
 
 """
 print( complexity( np.array([
