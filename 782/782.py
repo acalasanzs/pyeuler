@@ -125,11 +125,11 @@ class MatrixIterator:
     def __init__(self, n, k):
         self.n = n                                      #B-Matrix's size
         self.k = k                                      #B-Matrix's ones
+        self.matrix = np.zeros((self.n, self.n))         #Void (n, n) matrix
         self.cpositions = [BiPosition(self.n, i) for i in range(self.k)]
         self._current_position = 0
         self._index = 0
     def __next__(self):
-        self.matrix = np.zeros((self.n, self.n))         #Void (n, n) matrix
         def update():
             for idx in range(len(self.cpositions)):
                 x, y = self.cpositions[idx].current
@@ -155,11 +155,13 @@ class MatrixIterator:
         else:
             last = self.cpositions[self._current_position]
             x, y = last.current
+
             last_position = last[next_void()]
-            print(next_void())
             lx, ly = last_position
+
             self.matrix[lx][ly] = 1
-            self.matrix[x][y] = 0
+            self.matrix[x][y] = 2
+            print(self.matrix)
         self._index += 1
         return self.matrix
     def __iter__(self):
