@@ -131,9 +131,9 @@ class MatrixIterator:
     def __next__(self):
         self.matrix = np.zeros((self.n, self.n))         #Void (n, n) matrix
         def update():
-            print(self.cpositions)
             for idx in range(len(self.cpositions)):
-                print(self.cpositions[idx].x, self.cpositions[idx].y)
+                x, y = self.cpositions[idx].current
+                self.matrix[x][y] = 1
         def next_void():
             x = 0
             y = 0
@@ -155,8 +155,11 @@ class MatrixIterator:
         else:
             last = self.cpositions[self._current_position]
             x, y = last.current
+            last_position = last[next_void()]
+            print(next_void())
+            lx, ly = last_position
+            self.matrix[lx][ly] = 1
             self.matrix[x][y] = 0
-            last[next_void()]
         self._index += 1
         return self.matrix
     def __iter__(self):
@@ -168,7 +171,6 @@ proof_counter = 0
 for i in proof:
     if proof_counter > 2:
         break
-    print(i)
     proof_counter += 1
 class c:                                                #Create and object which will be used for contain all the values and its matrix in itself
     def __init__(self, n, k):
