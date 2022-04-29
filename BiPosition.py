@@ -5,7 +5,7 @@ class BiPosition:
         self.x = 0
         self.y = 0
         self._index = index if type(index) is int else 0
-        self.current = self.__getitem__(self._index)
+        self.current = None
     def __iter__(self):
         return self
     def __getitem__(self, item):
@@ -37,6 +37,9 @@ class BiPosition:
         self.current = [self.x, self.y]
         return self.current
     def __next__(self):
+        if self.current is None:
+            self.current = self.__getitem__(self._index)
+            return self.current
         to_arrive = self._index - (self.x + self.y*self.n)
         if to_arrive > 0:
             while to_arrive > 0:
@@ -81,4 +84,5 @@ class MatrixIterator:
 
 #proof = MatrixIterator(5,3)
 proof2 = BiPosition(5)
-print(proof2.current)
+for i in proof2:
+    print(i)
