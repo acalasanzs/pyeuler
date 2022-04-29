@@ -1,3 +1,4 @@
+import numpy as np
 class BiPosition:
     def __init__(self, n, index = 0):
         self.n = n
