@@ -1,19 +1,23 @@
 """
 Made with love by Albert Calasanz Sallen in Python 3
+I did it like if had being trying hard all at the same time i wasn't
 """
+from heapq import nsmallest
 import itertools
 import math
 import numpy as np
 
 # Example binary matrices
-A = np.array([
-    [1,0,1],
-    [0,0,0],
-    [1,0,1]])
-B = np.array([
-    [0,0,0],
-    [0,0,0],
-    [1,1,1]])
+example = {
+    "A" : np.array([
+        [1,0,1],
+        [0,0,0],
+        [1,0,1]]),
+    "B" : np.array([
+        [0,0,0],
+        [0,0,0],
+        [1,1,1]])
+}
 # Complexity binary matrix calculator
 def complexity(matrix):
     n = len(matrix)                                     #matrix size, as a 0-cube (square)
@@ -48,6 +52,57 @@ def complexity(matrix):
             raise "not a ndarray"
     else:
         raise "not a ndarray"
+class MatrixIterator:
+    def __init__(self, n, k):
+        self.n = n                                      #B-Matrix's size
+        self.k = k                                      #B-Matrix's ones
+        self.matrix = np.zeros((n, n))
+        self.cpositions = [self.BiPosition(self) for _ in range(self.k)]
+        self._index = 0
+        for x, y in self.BiPosition(self):
+            print(x, y)
+    def __next__(self):
+        self._index += 1
+        return self._index
+    def __iter__(self):
+        return self
+    class BiPosition:
+        def __init__(self, parent):
+            self.n = parent.n
+            self.x = 0
+            self.y = 0
+            self._index = 10
+        def __iter__(self):
+            return self
+        def __next__(self):
+            if self._index > 0:
+                to_arrive = self._index - (self.x + self.y*self.n)
+                while to_arrive > 0:
+                    if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+                        self.x = 0
+                        if self.y < self.n:
+                            self.y += 1
+                        else:
+                            raise StopIteration
+                    else:
+                        self.x += 1
+                        to_arrive -= 1
+                return [self.x, self.y]
+            else:
+                if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+                    self.x = 0
+                    if self.y < self.n:
+                        self.y += 1
+                    else:
+                        raise StopIteration
+                else:
+                    self.x += 1
+                return [self.x, self.y]   
+
+
+proof = MatrixIterator(5,3)
+
+
 class c:                                                #Create and object which will be used for contain all the values and its matrix in itself
     def __init__(self, n, k):
         self.n = n
