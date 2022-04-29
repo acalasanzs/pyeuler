@@ -60,7 +60,7 @@ class MatrixIterator:
         self.cpositions = [self.BiPosition(self, i) for i in range(self.k)]
         self._index = 0
         for i in self.cpositions:
-            print(i[i._index], i._index)
+            print(i[i._index])
     def __next__(self):
         self._index += 1
         return self._index
@@ -76,43 +76,18 @@ class MatrixIterator:
         def __iter__(self):
             return self
         def __getitem__(self, item):
-            to_arrive = item
-            if to_arrive == 0:
-                self.x = 0
-                self.y = 0
-                self.current = [self.x, self.y]
-                return self.current
-            elif to_arrive < 0:
-                while to_arrive < 0:
-                    if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
-                        self.x = 0
-                        if self.y < self.n:
-                            self.y -= 1
-                        else:
-                            raise StopIteration
+            to_arrive = item - (self.x + self.y*self.n)
+            while to_arrive > 0:
+                if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+                    self.x = 0
+                    if self.y < self.n:
+                        self.y += 1
                     else:
-                        self.x -= 1
-                    to_arrive += 1
-                
-                self.current = [self.x, self.y]
-                return self.current
-            else:
-                while True:
-                    if to_arrive == 0:
-                        break
-                    print(self.x, self.n)
-                    if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
-                        self.x = 0
-                        if self.y < self.n:
-                            self.y += 1
-                        else:
-                            raise StopIteration
-                    else:
-                        self.x += 1
-                    to_arrive -= 1
-                
-                self.current = [self.x, self.y]
-                return self.current
+                        raise StopIteration
+                self.x += 1
+                to_arrive -= 1
+            self.current = [self.x, self.y]
+            return self.current
         def __next__(self):
             to_arrive = self._index - (self.x + self.y*self.n)
             if to_arrive > 0:
