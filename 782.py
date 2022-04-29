@@ -61,7 +61,7 @@ class MatrixIterator:
         self.cpositions = [self.BiPosition(self, i) for i in range(self.k)]
         self._index = 0
         for i in self.cpositions:
-            print(i[1])
+            print(i[-1])
     def __next__(self):
         self._index += 1
         return self._index
@@ -78,7 +78,7 @@ class MatrixIterator:
             return self
         def __getitem__(self, item):
             if item < 0:
-                item = (self.n + self.n*self.n) - -item
+                item = (self.n + self.n*self.n) - -(item + 1)
             def go_to(to_arrive):
                 while to_arrive > 0:
                     if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
