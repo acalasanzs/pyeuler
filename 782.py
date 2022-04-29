@@ -5,6 +5,7 @@ I did it like if had being trying hard all at the same time i wasn't
 from heapq import nsmallest
 import itertools
 import math
+from turtle import goto
 import numpy as np
 
 # Example binary matrices
@@ -60,7 +61,7 @@ class MatrixIterator:
         self.cpositions = [self.BiPosition(self, i) for i in range(self.k)]
         self._index = 0
         for i in self.cpositions:
-            print(i[i._index])
+            print(i[1])
     def __next__(self):
         self._index += 1
         return self._index
@@ -76,16 +77,31 @@ class MatrixIterator:
         def __iter__(self):
             return self
         def __getitem__(self, item):
-            to_arrive = item - (self.x + self.y*self.n)
-            while to_arrive > 0:
-                if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
-                    self.x = 0
-                    if self.y < self.n:
-                        self.y += 1
+            if item < 0:
+                item = (self.n + self.n*self.n) - -item
+            def go_to(to_arrive):
+                while to_arrive > 0:
+                    if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+                        self.x = 0
+                        if self.y < self.n:
+                            self.y += 1
+                        else:
+                            raise StopIteration
+                    self.x += 1
+                    to_arrive -= 1
+            if item >= self._index:
+                to_arrive = item - (self.x + self.y*self.n)
+                go_to(to_arrive)
+            else:
+                while item < self._index:
+                    self.x -= 1
+                    item -= 1
+                    if self.y > 0:
+                        self.y -= 1
+                        self.x = 5
                     else:
-                        raise StopIteration
-                self.x += 1
-                to_arrive -= 1
+                        break
+                    
             self.current = [self.x, self.y]
             return self.current
         def __next__(self):
