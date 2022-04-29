@@ -71,12 +71,12 @@ class MatrixIterator:
             self.n = parent.n
             self.x = 0
             self.y = 0
-            self._index = 10
+            self._index = 15
         def __iter__(self):
             return self
         def __next__(self):
-            if self._index > 0:
-                to_arrive = self._index - (self.x + self.y*self.n)
+            to_arrive = self._index - (self.x + self.y*self.n)
+            if to_arrive > 0:
                 while to_arrive > 0:
                     if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
                         self.x = 0
@@ -87,6 +87,7 @@ class MatrixIterator:
                     else:
                         self.x += 1
                         to_arrive -= 1
+                
                 return [self.x, self.y]
             else:
                 if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
