@@ -59,37 +59,38 @@ class BiPosition:
         self.x = 0
         self.y = 0
         self._index = index if type(index) is int else 0
-        self.current = None
+        if index > 0: self.go_to(index)
+        self.current = self.__getitem__(self._index)
     def __iter__(self):
         return self
     def __getitem__(self, item):
         if item < 0:
             item = (self.n + self.n*self.n) - -(item + 1)
-        def go_to(to_arrive):
-            while to_arrive > 0:
-                if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
-                    self.x = 0
-                    if self.y < self.n:
-                        self.y += 1
-                    else:
-                        raise StopIteration
-                self.x += 1
-                to_arrive -= 1
         if item >= self._index:
             to_arrive = item - (self.x + self.y*self.n)
-            go_to(to_arrive)
+            self.go_to(to_arrive)
         else:
             while item < self._index:
                 self.x -= 1
-                item -= 1
+                self._index -= 1
                 if self.y > 0:
                     self.y -= 1
                     self.x = 5
-                else:
+                elif self.y == 0 and self.x == 0:
                     break
                 
         self.current = [self.x, self.y]
         return self.current
+    def go_to(self, to_arrive):
+        while to_arrive > 0:
+            if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+                self.x = 0
+                if self.y < self.n:
+                    self.y += 1
+                else:
+                    raise StopIteration
+            self.x += 1
+            to_arrive -= 1
     def __next__(self):
         if self.current is None:
             self.current = self.__getitem__(self._index)
@@ -130,8 +131,9 @@ class MatrixIterator:
     def __next__(self):
         self.matrix = np.zeros((self.n, self.n))         #Void (n, n) matrix
         def update():
+            print(self.cpositions)
             for idx in range(len(self.cpositions)):
-                self.matrix[self.cpositions[idx][0]][self.cpositions[idx][1]] = 1
+                print(self.cpositions[idx].x, self.cpositions[idx].y)
         def next_void():
             x = 0
             y = 0
@@ -151,7 +153,10 @@ class MatrixIterator:
         if self._index == 0:
             update()
         else:
-            print(self.cpositions[self._current_position][next_void()])
+            last = self.cpositions[self._current_position]
+            x, y = last.current
+            self.matrix[x][y] = 0
+            last[next_void()]
         self._index += 1
         return self.matrix
     def __iter__(self):
@@ -161,7 +166,7 @@ class MatrixIterator:
 proof = MatrixIterator(5,3)
 proof_counter = 0
 for i in proof:
-    if proof_counter > 5:
+    if proof_counter > 2:
         break
     print(i)
     proof_counter += 1

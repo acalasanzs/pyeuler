@@ -84,5 +84,4 @@ class MatrixIterator:
 
 #proof = MatrixIterator(5,3)
 proof2 = BiPosition(5)
-for i in proof2:
-    print(i)
+print(proof2[-2])
