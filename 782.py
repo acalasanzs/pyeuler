@@ -57,23 +57,30 @@ class MatrixIterator:
         self.n = n                                      #B-Matrix's size
         self.k = k                                      #B-Matrix's ones
         self.matrix = np.zeros((n, n))
-        self.cpositions = [self.BiPosition(self) for _ in range(self.k)]
+        self.cpositions = [self.BiPosition(self, i) for i in range(self.k)]
         self._index = 0
-        for x, y in self.BiPosition(self):
-            print(x, y)
+        for i in self.cpositions:
+            print(i[i._index])
     def __next__(self):
         self._index += 1
         return self._index
     def __iter__(self):
         return self
     class BiPosition:
-        def __init__(self, parent):
+        def __init__(self, parent, index):
             self.n = parent.n
             self.x = 0
             self.y = 0
-            self._index = 15
+            self._index = index if type(index) is int else 0
         def __iter__(self):
             return self
+        def __getitem__(self, item):
+            if item > 0:
+                self._index = item - 1
+                return self.__next__()
+            else:
+                self._index = item
+                return self.__next__()
         def __next__(self):
             to_arrive = self._index - (self.x + self.y*self.n)
             if to_arrive > 0:
