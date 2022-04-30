@@ -126,7 +126,7 @@ class MatrixIterator:
         self.n = n                                      #B-Matrix's size
         self.k = k                                      #B-Matrix's ones
         self.matrix = np.zeros((self.n, self.n))         #Void (n, n) matrix
-        self.cpositions = [BiPosition(self.n, i) for i in range(self.k)]
+        self.cpositions = [BiPosition(self.n - 1, i) for i in range(self.k)]
         self._current_position = 0
         self._index = 0
     def __next__(self):
@@ -134,7 +134,7 @@ class MatrixIterator:
             for idx in range(len(self.cpositions)):
                 x, y = self.cpositions[idx].current
                 self.matrix[x][y] = 1
-        def next_void():
+        def next_occurence(o):
             x = 0
             y = 0
             counter = 0
@@ -146,7 +146,7 @@ class MatrixIterator:
                     else:
                         break 
                 #The code
-                if self.matrix[x][y] == 0:
+                if self.matrix[x][y] == o:
                     return counter
                 counter += 1
                 x += 1
@@ -156,7 +156,7 @@ class MatrixIterator:
             last = self.cpositions[self._current_position]
             x, y = last.current
 
-            last_position = last[next_void()]
+            last_position = last[next_occurence(0)]
             lx, ly = last_position
 
             self.matrix[lx][ly] = 1
@@ -171,7 +171,8 @@ class MatrixIterator:
 proof = MatrixIterator(5,3)
 proof_counter = 0
 for i in proof:
-    if proof_counter > 2:
+    print("_____________")
+    if proof_counter > 20:
         break
     proof_counter += 1
 class c:                                                #Create and object which will be used for contain all the values and its matrix in itself
