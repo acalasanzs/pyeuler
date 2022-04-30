@@ -56,6 +56,7 @@ class BiPosition:
         self.n = n
         self.x = 0
         self.y = 0
+        self.start = False
         self._index = index if type(index) is int else 0
         if index > 0: self.go_to(index)
         self.current = self.__getitem__(self._index)
@@ -91,34 +92,20 @@ class BiPosition:
             self._index += 1
             to_arrive -= 1
     def __next__(self):
-        if self.current is None:
-            self.current = self.__getitem__(self._index)
+        if not self.start:
+            self.start = True
             return self.current
-        to_arrive = self._index - (self.x + self.y*self.n)
-        if to_arrive > 0:
-            while to_arrive > 0:
-                if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
-                    self.x = 0
-                    if self.y < self.n:
-                        self.y += 1
-                    else:
-                        raise StopIteration
-                else:
-                    self.x += 1
-                to_arrive -= 1
-                self._index += 1
-        else:
-            if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
-                self.x = 0
-                if self.y < self.n:
-                    self.y += 1
-                else:
-                    raise StopIteration
+        if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+            self.x = 0
+            if self.y < self.n:
+                self.y += 1
             else:
-                self.x += 1
-            self._index += 1
+                raise StopIteration
+        else:
+            self.x += 1
+        self._index += 1
         self.current = [self.x, self.y]
-        return self.current 
+        return self.current
 class MatrixIterator:
     def __init__(self, n, k):
         self.n = n                                      #B-Matrix's size
@@ -153,14 +140,13 @@ class MatrixIterator:
         else:
             last = self.cpositions[self._current_position]
             x, y = last.current
-            while next_occurence(0) != last._index:
+            while next_occurence(0) == last._index:
                 print(next_occurence(0),last._index) 
                 next(last)
             self.matrix[x][y] = 2
             lx, ly = last.current
 
             self.matrix[lx][ly] = 1
-            print(self.matrix)
         self._index += 1
         return self.matrix
     def __iter__(self):
