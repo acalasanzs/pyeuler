@@ -2,10 +2,8 @@
 Made with love by Albert Calasanz Sallen in Python 3
 I did it like if had being trying hard all at the same time i wasn't
 """
-from heapq import nsmallest
 import itertools
 import math
-from turtle import goto
 import numpy as np
 
 # Example binary matrices
@@ -90,6 +88,7 @@ class BiPosition:
                 else:
                     raise StopIteration
             self.x += 1
+            self._index += 1
             to_arrive -= 1
     def __next__(self):
         if self.current is None:
@@ -107,9 +106,7 @@ class BiPosition:
                 else:
                     self.x += 1
                 to_arrive -= 1
-            
-            self.current = [self.x, self.y]
-            return self.current
+                self._index += 1
         else:
             if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
                 self.x = 0
@@ -119,8 +116,9 @@ class BiPosition:
                     raise StopIteration
             else:
                 self.x += 1
-            self.current = [self.x, self.y]
-            return self.current 
+            self._index += 1
+        self.current = [self.x, self.y]
+        return self.current 
 class MatrixIterator:
     def __init__(self, n, k):
         self.n = n                                      #B-Matrix's size
@@ -155,12 +153,13 @@ class MatrixIterator:
         else:
             last = self.cpositions[self._current_position]
             x, y = last.current
-
-            last_position = last[next_occurence(0)]
-            lx, ly = last_position
+            while next_occurence(0) != last._index:
+                print(next_occurence(0),last._index) 
+                next(last)
+            self.matrix[x][y] = 2
+            lx, ly = last.current
 
             self.matrix[lx][ly] = 1
-            self.matrix[x][y] = 2
             print(self.matrix)
         self._index += 1
         return self.matrix
