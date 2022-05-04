@@ -9,6 +9,8 @@ class prime:
         return self
     def __next__(self):
         def is_prime():
+            if self.current == 1:
+                return False
             x = self.current-1
             while x > 1:
                 if self.current % x == 0:
@@ -28,11 +30,12 @@ def to_exponent(base, exp):
     result = 1
     results = []
     def posible_sums(num):
-        divisor = 2
-        while True:
-            if divisor
-            current = num / divisor
-            divisor += current.is_integer()
+        divisor = prime()
+        next(divisor)
+        while divisor.current < num:
+            current = num / divisor.current
+            if current.is_integer():
+                next(divisor)
 
     for x in range(2, exp+1):
         results.append((x, pow(base, x)))
