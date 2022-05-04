@@ -1,6 +1,3 @@
-import itertools
-import numpy
-
 example = "3523014"
 
 def find_10substring(string: str):
