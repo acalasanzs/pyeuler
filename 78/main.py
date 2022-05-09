@@ -1,12 +1,14 @@
 def p(n):
-    results = [[1 for _ in range(n)]]
+    first = [1 for _ in range(n)]
+    results = [first.copy()]
     cantidad_de_vacios = 1
-    while cantidad_de_vacios < n -1:
-        index = [0 for _ in range(cantidad_de_vacios)]
-        for x in range(cantidad_de_vacios):
-            actual = [1 for _ in range(n)]
-            actual.insert(index[x], 0)
-            results.append(actual)
+    while cantidad_de_vacios < n:
+        idx = 1
+        actual = first.copy()
+        while idx < cantidad_de_vacios*2:
+            actual.insert(idx, 0)
+            idx += 2
+        results.append(actual)
         cantidad_de_vacios += 1
     return results
 
