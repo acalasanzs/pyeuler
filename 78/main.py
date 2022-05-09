@@ -1,26 +1,29 @@
-import numpy as np
 def p(n):
-    first = [1 for _ in range(n)]
-    results = [first.copy()]
-    cantidad_de_vacios = 1
-    while cantidad_de_vacios < n:
-        actual = first.copy()
-        existent = False
+    first = [1 for _ in range(n)]                   #First combination
+    results = [first.copy()]                        #Total combinations list
+    cantidad_de_vacios = 1                          #Cantidad de vacíos
+    while cantidad_de_vacios < n:                   # Mientras la cantidad de vacios sea menor que n, es decir, todos los vacios disponibles
+        actual = first.copy()                       # Hacer una copia de la primera combinación para modificarla                          
         def update(index):
             global existent
             for current in index:
                 actual.insert(current, 0)
             for arr in results:
                 try:
-                    assert all([True if arr[idx] == actual[idx] else False for idx in range(len(actual))]) or all([True if arr[idx] == actual[len(actual)-idx] else False for idx in range(len(actual))])
-                    existent = True
-                    return
+                    if all([True if arr[idx] == actual[idx] else False for idx in range(len(actual))]) or all([True if arr[idx] == actual[len(actual)-idx] else False for idx in range(len(actual))]):
+                        existent = True
+                        return False
+                    else:
+                        raise IndexError
                 except IndexError:
                     pass
             results.append(actual)
+            return True
         index = [i for i in range(1, cantidad_de_vacios*2, 2)]
         update(index)
+
         for i in range(cantidad_de_vacios):
+            existent = False
             while not existent:
                 without_it = index.copy()
                 last = without_it[i]
@@ -31,8 +34,7 @@ def p(n):
                 if index[i] > len(actual)-1:
                     index[i] = last
                     break
-                update(index)
-            existent = False
+                existent = update(index)
         cantidad_de_vacios += 1
     return results
 
