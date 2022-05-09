@@ -7,15 +7,19 @@ def p(n):
         actual = first.copy()
         existent = False
         def update(index):
+            global existent
             for current in index:
                 actual.insert(current, 0)
             for arr in results:
-                if np.array_equal(arr, actual):
+                try:
+                    assert all([True if arr[idx] == actual[idx] else False for idx in range(len(actual))]) or all([True if arr[idx] == actual[len(actual)-idx] else False for idx in range(len(actual))])
                     existent = True
                     return
+                except IndexError:
+                    pass
             results.append(actual)
         index = [i for i in range(1, cantidad_de_vacios*2, 2)]
-        #update(index)
+        update(index)
         for i in range(cantidad_de_vacios):
             while not existent:
                 without_it = index.copy()
@@ -24,9 +28,9 @@ def p(n):
                 index[i] += 2
                 while index[i] in without_it:
                     index[i] += 2
-                if index[i] > index[-1]:
+                if index[i] > len(actual)-1:
                     index[i] = last
-                    continue
+                    break
                 update(index)
             existent = False
         cantidad_de_vacios += 1
