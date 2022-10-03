@@ -20,3 +20,4 @@ class Prime:
                 return False
             x -= 1
         return True
+
