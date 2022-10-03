@@ -29,10 +29,12 @@ class Recursive:
             setattr(self, str(key), value)
         def __getitem__(self, item):
             current = self
-            for idx in [x for x in (item if not type(item) == int else [item])]:
+            items = [x for x in (item if not type(item) == int else [item])]
+            for i,idx in enumerate(items):
                 current = getattr(current, str(idx))
-                if not isinstance(current, Recursive.sequence):
-                    return current
+                if isinstance(current, Recursive.sequence) and i < (len(items) - 1):
+                    continue
+                return current
         def push(self, *values):
             for value in values:
                 setattr(self, self.current, value)
