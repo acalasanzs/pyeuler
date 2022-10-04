@@ -43,6 +43,7 @@ example = {
         [1,1,1]])
 }
 
+
 #returns the columns as an 2d array (such as a rerversed 2D matrix)
 def columns(array):
     t = [[] for _ in array[0]]                      #Prepares a void 2d array
@@ -149,6 +150,14 @@ class DimensionalPosition:
         else:
             return self.go_to(1)
 
+#returns the chess value of a n-matrix
+def chess_position(position, n):
+    paridad = n % 2 == 0
+    condition = (DimensionalPosition.convert_base(position, n) + 2) % 2 == 0
+    if paridad:
+        return condition
+    else:
+        return not condition
 
 # For 0 <= k <= n^2, let c(n,k) be the minimum complexity of an n * n matrix with eactly k ones.
 def minimum(n, k):
@@ -157,58 +166,26 @@ def minimum(n, k):
     matrix_max = DimensionalPosition(2, n, n * n - 1)
     one_position = []
 
-    relative_half = int(n/2)
-    count = k
-
-    actual = n - relative_half
-    cactual = 1
-    changed = False
-    done = False
-    my_turn_up = False
-    while count > 0:
-        if count == k:
-            one_position.append(matrix_max.current)
-        else:
-            if count % 2 == 0 and count <= relative_half:
-                one_position.append(matrix_max.go_to_d(1, -1))
-            else:
-                if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed:
-                    one_position.append(next(matrix_position))
-                else:
-                    if matrix_position.current[0] >= relative_half:
-                        changed = True
-                        condition = (my_turn_up) if not done else True
-                        if condition:
-                            matrix_position.current = [actual, n - cactual]
-                            one_position.append(matrix_position.go_to(-1))
-                            actual += 1
-                            if actual > (n - relative_half + 1):
-                                my_turn_up = not my_turn_up
-                                actual = n - relative_half
-                                cactual += 1
-                                if cactual > n:
-                                    changed = False
-                        else:
-                            one_position.append(matrix_max.go_to_d(1, -1))
-                            my_turn_up = not my_turn_up
-                            if matrix_max.current[0] == 0 + 1:
-                                done = True
-                    else:
-                        matrix_position.go_to_d(1,0)
-                        one_position.append(matrix_position.go_to(relative_half))
-        count -= 1
+    count = 0
+    while count < k:
+        try:
+            if chess_position(next(matrix_position), n):
+                one_position.append(matrix_position.current)
+                count += 1
+        except StopIteration:
+            break # all chess tables done
     for pos in one_position:
         Recursive.set_item(void, pos, 1)
-    time.sleep(1.2)
-    os.system("cls")
-    print(np.flipud(void))
+    # time.sleep(1.2)
+    # os.system("cls")
+    # print(np.flipud(void))
     return np.flipud(void)
 
 
 def C(N):
     temp = 0
     for x in range(N**2 + 1):
-        # print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
+        print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
         temp += len(complexity(minimum(N, x)))
     return temp
 

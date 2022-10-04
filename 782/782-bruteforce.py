@@ -165,43 +165,12 @@ def minimum(n, k):
     changed = False
     done = False
     my_turn_up = False
-    while count > 0:
-        if count == k:
-            one_position.append(matrix_max.current)
-        else:
-            if count % 2 == 0 and count <= relative_half:
-                one_position.append(matrix_max.go_to_d(1, -1))
-            else:
-                if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed:
-                    one_position.append(next(matrix_position))
-                else:
-                    if matrix_position.current[0] >= relative_half:
-                        changed = True
-                        condition = (my_turn_up) if not done else True
-                        if condition:
-                            matrix_position.current = [actual, n - cactual]
-                            one_position.append(matrix_position.go_to(-1))
-                            actual += 1
-                            if actual > (n - relative_half + 1):
-                                my_turn_up = not my_turn_up
-                                actual = n - relative_half
-                                cactual += 1
-                                if cactual > n:
-                                    changed = False
-                        else:
-                            one_position.append(matrix_max.go_to_d(1, -1))
-                            my_turn_up = not my_turn_up
-                            if matrix_max.current[0] == 0 + 1:
-                                done = True
-                    else:
-                        matrix_position.go_to_d(1,0)
-                        one_position.append(matrix_position.go_to(relative_half))
-        count -= 1
-    for pos in one_position:
-        Recursive.set_item(void, pos, 1)
-    time.sleep(1.2)
-    os.system("cls")
-    print(np.flipud(void))
+    def update():
+        for pos in one_position:
+            Recursive.set_item(void, pos, 1)
+    # time.sleep(.08)
+    # os.system("cls")
+    # print(np.flipud(void))
     return np.flipud(void)
 
 
