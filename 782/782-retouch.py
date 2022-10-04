@@ -73,6 +73,7 @@ class DimensionalPosition:
             return result[::-1]
     @staticmethod
     def convert_base(num, base):
+        if type(num) is int:
             last = num
             result = []
             while True:
@@ -82,11 +83,23 @@ class DimensionalPosition:
                 if calc == 0:
                     break
             return result
+        elif type(num) is list:
+            temp = 0
+            for i, x in enumerate(num[::-1]):
+                temp += x * (base ** i)
+            return temp
     def go_to(self, to_arrive):
-        current = int("".join([str(x) for x in self.current]), base = self.n)
         if to_arrive < 0:
             to_arrive = (self.n ** self.d) - to_arrive
-        end = DimensionalPosition.convert_base(int("".join([str(x) for x in DimensionalPosition.convert_base(to_arrive, self.n)[::-1]]), base=self.n) + current, self.n)
+        if self.n < 10:
+            current = int("".join([str(x) for x in self.current]), base = self.n)
+            end = DimensionalPosition.convert_base(int("".join([str(x) for x in DimensionalPosition.convert_base(to_arrive, self.n)[::-1]]), base=self.n) + current, self.n)
+        else:
+            #Convert from base >10 to base 10, sum, and then convert to base >10 again
+            end = DimensionalPosition.convert_base(
+                DimensionalPosition.convert_base(self.current, self.n) + to_arrive,
+                self.n
+            )
         if len(end) > self.d:
             raise StopIteration
         while len(end) < self.d:
@@ -105,8 +118,8 @@ class DimensionalPosition:
 def minimum(n, k):
     # TODO:
     # 
-    matrix_position = DimensionalPosition(2, n)
-
+    matrix_position = DimensionalPosition(n, n)
+    one_position = DimensionalPosition(n, n)
     for x in matrix_position:
         print(x)
-minimum(2,0)
+minimum(15,0)
