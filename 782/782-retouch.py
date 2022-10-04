@@ -16,6 +16,14 @@ example = {
         [0,0,0],
         [1,1,1]])
 }
+#returns the columns as an 2d array (such as a rerversed 2D matrix)
+def columns(array):
+    t = [[] for _ in array[0]]                      #Prepares a void 2d array
+    for column,i in enumerate(array[0]):            #For each column index
+        for row in range(len(array)):               #For each row
+            t[column].append(array[row][column])    #Append to current value to the current column index
+    return t
+
 # Complexity binary matrix calculator
 def complexity(matrix):
     n = len(matrix)                                     #matrix size, as a 0-cube (square)
@@ -26,14 +34,6 @@ def complexity(matrix):
             if np.array_equal(a,arr):
                 return True
         return False
-    
-    #returns the columns as an 2d array (such as a rerversed 2D matrix)
-    def columns(array):
-        t = [[] for _ in array[0]]                      #Prepares a void 2d array
-        for column,i in enumerate(array[0]):            #For each column index
-            for row in range(len(array)):               #For each row
-                t[column].append(array[row][column])    #Append to current value to the current column index
-        return t
 
     #Here comes the work
     if type(matrix) is np.ndarray:                      #check if It's a 2d np matrix
@@ -89,17 +89,19 @@ class DimensionalPosition:
                 temp += x * (base ** i)
             return temp
     def go_to(self, to_arrive):
-        if to_arrive < 0:
-            to_arrive = (self.n ** self.d) - to_arrive
         if self.n < 10:
             current = int("".join([str(x) for x in self.current]), base = self.n)
-            end = DimensionalPosition.convert_base(int("".join([str(x) for x in DimensionalPosition.convert_base(to_arrive, self.n)[::-1]]), base=self.n) + current, self.n)
+            end = DimensionalPosition.convert_base(to_arrive + current, self.n)
         else:
-            #Convert from base >10 to base 10, sum, and then convert to base >10 again
-            end = DimensionalPosition.convert_base(
-                DimensionalPosition.convert_base(self.current, self.n) + to_arrive,
-                self.n
-            )
+            current = current
+            if to_arrive < 0:
+                end = DimensionalPosition.convert_base(DimensionalPosition.convert_base(current, self.n) + to_arrive, self.n)
+            else:
+                #Convert from base >10 to base 10, sum, and then convert to base >10 again
+                end = DimensionalPosition.convert_base(
+                    DimensionalPosition.convert_base(current, self.n) + to_arrive,
+                    self.n
+                )
         if len(end) > self.d:
             raise StopIteration
         while len(end) < self.d:
@@ -118,8 +120,13 @@ class DimensionalPosition:
 def minimum(n, k):
     # TODO:
     # 
-    matrix_position = DimensionalPosition(n, n)
-    one_position = DimensionalPosition(n, n)
+    void = np.empty([n, n])
+    matrix_position = DimensionalPosition(2, n)
+    matrix_max = DimensionalPosition(2, n, n * n - 1)
+    one_position = []
     for x in matrix_position:
         print(x)
-minimum(15,0)
+    for one in range(k):
+        one_position.append(matrix_max.go_to(-1))
+    print(one_position)
+minimum(5,3)
