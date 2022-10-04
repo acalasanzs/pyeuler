@@ -164,6 +164,7 @@ def minimum(n, k):
     cactual = 1
     changed = False
     done = False
+    my_turn_up = False
     while count > 0:
         if count == k:
             one_position.append(matrix_max.current)
@@ -174,18 +175,25 @@ def minimum(n, k):
                 if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed:
                     one_position.append(next(matrix_position))
                 else:
-                    if matrix_position.current[0] >= relative_half and not done:
+                    if matrix_position.current[0] >= relative_half:
                         changed = True
-                        matrix_position.current = [actual, n - cactual]
-                        one_position.append(matrix_position.go_to(-1))
-                        actual -= 1
-                        if actual < (n - relative_half):
-                            actual = n - 1
-                            cactual += 1
-                            if cactual > n:
-                                changed = False
+                        condition = (my_turn_up) if not done else True
+                        if condition:
+                            matrix_position.current = [actual, n - cactual]
+                            one_position.append(matrix_position.go_to(-1))
+                            actual -= 1
+                            if actual < (n - relative_half):
+                                actual = n - 1
+                                cactual += 1
+                                if cactual > n:
+                                    changed = False
+                            my_turn_up = not my_turn_up
+                        else:
+                            if matrix_max.current[1] == 0:
+                                print("yes")
                                 done = True
-                                print("no")
+                            one_position.append(matrix_max.go_to_d(1, -1))
+                            my_turn_up = not my_turn_up
                     else:
                         matrix_position.go_to_d(1,0)
                         one_position.append(matrix_position.go_to(relative_half))
@@ -201,21 +209,21 @@ def minimum(n, k):
 def C(N):
     temp = 0
     for x in range(N**2 + 1):
-        #print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
+        # print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
         temp += len(complexity(minimum(N, x)))
     return temp
 
 C(5)
-""" print(
+print(
     complexity(
         np.array(
             [
-                [0,0,0,0,1],
-                [0,0,0,0,1],
-                [0,0,0,0,1],
+                [0,0,1,1,1],
+                [0,0,1,1,1],
+                [1,1,1,1,1],
                 [1,1,1,1,0],
-                [1,1,1,1,1]
+                [1,1,1,1,0]
             ]
         )
     )
-) """
+)
