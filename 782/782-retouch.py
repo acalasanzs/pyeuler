@@ -89,22 +89,10 @@ class DimensionalPosition:
         end = [int(x, base=self.n) for x in str(end)][::-1]
         while len(end) < self.d:
             end.append(0)
-        return end[::-1]
-    def __next__(self):
-        if not self.start:
-            self.start = True
-            return self.current
-        if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
-            self.x = 0
-            if self.y < self.n:
-                self.y += 1
-            else:
-                raise StopIteration
-        else:
-            self.x += 1
-        self._index += 1
-        self.current = [self.x, self.y]
+        self.current = end[::-1]
         return self.current
+    def __next__(self):
+        return self.go_to(1)
 
 
 # For 0 <= k <= n^2, let c(n,k) be the minimum complexity of an n * n matrix with eactly k ones.
