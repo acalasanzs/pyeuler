@@ -58,7 +58,7 @@ def complexity(matrix):
     #calculates if there is a match for arrays inside an array
     def setin(array,arr):
         for a in array:
-            if np.array_equal(a,arr):
+            if np.array_equal(a,arr) or np.array_equal(a[::-1],arr):
                 return True
         return False
 
@@ -157,17 +157,28 @@ def minimum(n, k):
             while count > 0:
                 count -= 1
                 one_position.append(matrix_max.go_to(-1))
-    for i, pos in enumerate(one_position):
-        Recursive.set_item(void, pos, 1)
-        if k / 2 == i + 1:
+    for pos in one_position:
+        if k == n:
             return np.eye(n)
+        Recursive.set_item(void, pos, 1)
     return void
 
 
 def C(N):
     temp = 0
     for x in range(N**2 + 1):
+        print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
         temp += len(complexity(minimum(N, x)))
     return temp
 
-print(C(2))
+print(C(5))
+
+""" print(complexity(
+    np.array(
+        [
+            [1,0,0],
+            [0,1,0],
+            [1,0,1]
+        ]
+    )
+)) """
