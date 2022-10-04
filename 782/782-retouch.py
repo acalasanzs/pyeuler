@@ -160,7 +160,7 @@ def minimum(n, k):
     relative_half = int(n/2)
     count = k
 
-    actual = n - 1
+    actual = n - relative_half
     cactual = 1
     changed = False
     done = False
@@ -181,19 +181,19 @@ def minimum(n, k):
                         if condition:
                             matrix_position.current = [actual, n - cactual]
                             one_position.append(matrix_position.go_to(-1))
-                            actual -= 1
-                            if actual < (n - relative_half):
-                                actual = n - 1
+                            actual += 1
+                            print(actual)
+                            if actual > (n - relative_half + 1):
+                                my_turn_up = not my_turn_up
+                                actual = n - relative_half
                                 cactual += 1
                                 if cactual > n:
                                     changed = False
-                            my_turn_up = not my_turn_up
                         else:
-                            if matrix_max.current[1] == 0:
-                                print("yes")
-                                done = True
                             one_position.append(matrix_max.go_to_d(1, -1))
                             my_turn_up = not my_turn_up
+                            if matrix_max.current[0] == 0 + 1:
+                                done = True
                     else:
                         matrix_position.go_to_d(1,0)
                         one_position.append(matrix_position.go_to(relative_half))
@@ -213,7 +213,7 @@ def C(N):
         temp += len(complexity(minimum(N, x)))
     return temp
 
-C(5)
+print(C(5))
 print(
     complexity(
         np.array(
