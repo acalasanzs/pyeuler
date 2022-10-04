@@ -2,6 +2,7 @@
 Made with love by Albert Calasanz Sallen in Python 3
 This time I'm going hard.
 """
+from email.mime import base
 import numpy as np
 
 example = {
@@ -52,7 +53,7 @@ def complexity(matrix):
 # print(complexity(example["A"]))
 
 class DimensionalPosition:
-    def __init__(self, d, n, index = 2):
+    def __init__(self, d, n, index = 0):
         self.d = d
         self.n = n
         self.pos = [0 for x in range(d)]
@@ -63,7 +64,14 @@ class DimensionalPosition:
     def __iter__(self):
         return self
     def __getitem__(self, item):
-        def convert_base(num, base):
+        result = self.convert_base(item, self.n)
+        while len(result) < self.d:
+            result.append(0)
+        if len(result) > self.d:
+            raise IndexError
+        else:
+            return result[::-1]
+    def convert_base(self, num, base):
             last = num
             result = []
             while True:
@@ -73,25 +81,15 @@ class DimensionalPosition:
                 if calc == 0:
                     break
             return result
-        result = convert_base(item, self.n)
-        while len(result) < self.d:
-            result.append(0)
-        if len(result) > self.d:
-            raise IndexError
-        else:
-            return result[::-1]
-            
     def go_to(self, to_arrive):
-        while to_arrive > 0:
-            if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
-                self.x = 0
-                if self.y < self.n:
-                    self.y += 1
-                else:
-                    raise StopIteration
-            self.x += 1
-            self._index += 1
-            to_arrive -= 1
+        current = int("".join([str(x) for x in self.current]), base = self.n)
+        if to_arrive < 0:
+            to_arrive = (self.n ** self.d) - to_arrive
+        end = int("".join([str(x) for x in self.convert_base(to_arrive, self.n)[::-1]]), base=self.n) + current
+        end = [int(x, base=self.n) for x in str(end)][::-1]
+        while len(end) < self.d:
+            end.append(0)
+        return end[::-1]
     def __next__(self):
         if not self.start:
             self.start = True
@@ -114,4 +112,6 @@ class DimensionalPosition:
     # TODO:
     # 
 
-pos = DimensionalPosition(3,5)
+pos = DimensionalPosition(5,5)
+pos.go_to(-5)
+print(pos.current)
