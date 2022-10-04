@@ -2,8 +2,8 @@
 Made with love by Albert Calasanz Sallen in Python 3
 This time I'm going hard.
 """
-from email.mime import base
-from time import struct_time
+import os
+import time
 import numpy as np
 
 class Recursive:
@@ -159,6 +159,10 @@ def minimum(n, k):
 
     relative_half = int(n/2)
     count = k
+
+    actual = n - 1
+    cactual = 1
+    changed = False
     while count > 0:
         if count == k:
             one_position.append(matrix_max.current)
@@ -166,17 +170,25 @@ def minimum(n, k):
             if count % 2 == 0 and count <= relative_half:
                 one_position.append(matrix_max.go_to_d(1, -1))
             else:
-                if matrix_position.current[1] <= (n - relative_half) and matrix_position.current[0] <= (n - relative_half):
+                if matrix_position.current[1] <= (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed:
                     one_position.append(next(matrix_position))
                 else:
                     if matrix_position.current[0] >= relative_half:
-                        pass
+                        changed = True
+                        matrix_position.current = [actual, n - cactual]
+                        one_position.append(matrix_position.go_to(-1))
+                        actual -= 1
+                        if actual < (n - relative_half):
+                            actual = n - 1
+                            cactual += 1
                     else:
                         matrix_position.go_to_d(1,0)
                         one_position.append(matrix_position.go_to(1))
         count -= 1
     for pos in one_position:
         Recursive.set_item(void, pos, 1)
+    time.sleep(.5)
+    os.system("cls")
     print(np.flipud(void))
     return np.flip(void)
 
@@ -188,8 +200,7 @@ def C(N):
         temp += len(complexity(minimum(N, x)))
     return temp
 
-# print(C(5))
-minimum(5,25)
+C(5)
 """ print(
     complexity(
         np.array(
