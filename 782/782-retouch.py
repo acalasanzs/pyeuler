@@ -55,12 +55,11 @@ def complexity(matrix):
 
 class DimensionalPosition:
     def __init__(self, d, n, index = 0):
-        self.d = d
-        self.n = n
+        self.d = d                                                      #Dimension which defines the length of the index array
+        self.n = n                                                      #Number base
         self.pos = [0 for x in range(d)]
         self.start = False
         self._index = index if type(index) is int else 0
-        #if index > 0: self.go_to(index)
         self.current = self.__getitem__(self._index)
     def __iter__(self):
         return self
@@ -89,23 +88,25 @@ class DimensionalPosition:
             to_arrive = (self.n ** self.d) - to_arrive
         end = DimensionalPosition.convert_base(int("".join([str(x) for x in DimensionalPosition.convert_base(to_arrive, self.n)[::-1]]), base=self.n) + current, self.n)
         if len(end) > self.d:
-            return
-        print(end)
+            raise StopIteration
         while len(end) < self.d:
             end.append(0)
         self.current = end[::-1]
         return self.current
     def __next__(self):
-        return self.go_to(1)
+        if not self.start:
+            self.start = True
+            return self.current
+        else:
+            return self.go_to(1)
 
 
 # For 0 <= k <= n^2, let c(n,k) be the minimum complexity of an n * n matrix with eactly k ones.
-#def minimum(n, k):
+def minimum(n, k):
     # TODO:
     # 
+    matrix_position = DimensionalPosition(2, n)
 
-pos = DimensionalPosition(5,5)
-
-
-for x in pos:
-    x
+    for x in matrix_position:
+        print(x)
+minimum(2,0)
