@@ -149,16 +149,23 @@ def minimum(n, k):
     # 
     void = np.zeros([n, n])
     matrix_max = DimensionalPosition(2, n, n * n - 1)
-    one_position = [matrix_max.current]
-    for one in range(k):
-        one_position.append(matrix_max.go_to(-1))
+    one_position = []
+    if k > 0:
+        one_position.append(matrix_max.current)
+        if k > 1:
+            count = k - 1
+            while count > 0:
+                count -= 1
+                one_position.append(matrix_max.go_to(-1))
     for pos in one_position:
         Recursive.set_item(void, pos, 1)
-    return np.flipud(void)
+    return void
 
 
-print(
-    complexity(
-        minimum(5,3)
-    )
-)
+def C(N):
+    temp = 0
+    for x in range(N**2 + 1):
+        print(complexity(minimum(N, x)))
+        temp += len(complexity(minimum(N, x)))
+    return temp
+C(2)
