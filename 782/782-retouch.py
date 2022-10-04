@@ -163,6 +163,7 @@ def minimum(n, k):
     actual = n - 1
     cactual = 1
     changed = False
+    done = False
     while count > 0:
         if count == k:
             one_position.append(matrix_max.current)
@@ -170,10 +171,10 @@ def minimum(n, k):
             if count % 2 == 0 and count <= relative_half:
                 one_position.append(matrix_max.go_to_d(1, -1))
             else:
-                if matrix_position.current[1] <= (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed:
+                if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed:
                     one_position.append(next(matrix_position))
                 else:
-                    if matrix_position.current[0] >= relative_half:
+                    if matrix_position.current[0] >= relative_half and not done:
                         changed = True
                         matrix_position.current = [actual, n - cactual]
                         one_position.append(matrix_position.go_to(-1))
@@ -181,16 +182,20 @@ def minimum(n, k):
                         if actual < (n - relative_half):
                             actual = n - 1
                             cactual += 1
+                            if cactual > n:
+                                changed = False
+                                done = True
+                                print("no")
                     else:
                         matrix_position.go_to_d(1,0)
-                        one_position.append(matrix_position.go_to(1))
+                        one_position.append(matrix_position.go_to(relative_half))
         count -= 1
     for pos in one_position:
         Recursive.set_item(void, pos, 1)
-    time.sleep(.5)
+    time.sleep(.3)
     os.system("cls")
     print(np.flipud(void))
-    return np.flip(void)
+    return np.flipud(void)
 
 
 def C(N):
