@@ -160,6 +160,11 @@ def minimum(n, k):
     for pos in one_position:
         if k == n:
             return np.eye(n)
+        elif (k - n) == n:
+            temp = np.ones([n,n])
+            np.fill_diagonal(temp,0)
+            print(temp)
+            return temp
         Recursive.set_item(void, pos, 1)
     return void
 
@@ -171,14 +176,16 @@ def C(N):
         temp += len(complexity(minimum(N, x)))
     return temp
 
-print(C(5))
+# print(C(5))
 
-""" print(complexity(
+print(complexity(
     np.array(
         [
-            [1,0,0],
-            [0,1,0],
-            [1,0,1]
+            [0,0,0,1],
+            [0,0,0,1],
+            [1,1,0,0],
+            [1,1,0,0],
         ]
     )
-)) """
+))
+print(complexity(minimum(5,6)))
