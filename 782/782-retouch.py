@@ -182,7 +182,6 @@ def minimum(n, k):
                             matrix_position.current = [actual, n - cactual]
                             one_position.append(matrix_position.go_to(-1))
                             actual += 1
-                            print(actual)
                             if actual > (n - relative_half + 1):
                                 my_turn_up = not my_turn_up
                                 actual = n - relative_half
