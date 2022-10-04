@@ -3,6 +3,7 @@ Made with love by Albert Calasanz Sallen in Python 3
 This time I'm going hard.
 """
 from email.mime import base
+from time import struct_time
 import numpy as np
 
 example = {
@@ -64,14 +65,15 @@ class DimensionalPosition:
     def __iter__(self):
         return self
     def __getitem__(self, item):
-        result = self.convert_base(item, self.n)
+        result = DimensionalPosition.convert_base(item, self.n)
         while len(result) < self.d:
             result.append(0)
         if len(result) > self.d:
             raise IndexError
         else:
             return result[::-1]
-    def convert_base(self, num, base):
+    @staticmethod
+    def convert_base(num, base):
             last = num
             result = []
             while True:
@@ -85,8 +87,10 @@ class DimensionalPosition:
         current = int("".join([str(x) for x in self.current]), base = self.n)
         if to_arrive < 0:
             to_arrive = (self.n ** self.d) - to_arrive
-        end = int("".join([str(x) for x in self.convert_base(to_arrive, self.n)[::-1]]), base=self.n) + current
-        end = [int(x, base=self.n) for x in str(end)][::-1]
+        end = DimensionalPosition.convert_base(int("".join([str(x) for x in DimensionalPosition.convert_base(to_arrive, self.n)[::-1]]), base=self.n) + current, self.n)
+        if len(end) > self.d:
+            return
+        print(end)
         while len(end) < self.d:
             end.append(0)
         self.current = end[::-1]
@@ -101,5 +105,7 @@ class DimensionalPosition:
     # 
 
 pos = DimensionalPosition(5,5)
-pos.go_to(-5)
-print(pos.current)
+
+
+for x in pos:
+    x
