@@ -39,6 +39,23 @@ class Recursive:
             for value in values:
                 setattr(self, self.current, value)
                 self.increase()
+        def toArray(self):
+            temp = []
+            for x in range(self.len):
+                temp.append(self[str(x)])
+            return temp
+        def toArrayRecursively(self):
+            arr = self.toArray()
+            index = 0
+            last = arr[index]
+            while True:
+                try:
+                    last = [x.toArray() for x in last]
+                except:
+                    if index == len(arr) - 1:
+                        break
+                    index += 1
+                    last = arr[index]
     @staticmethod
     def array(n,n2):
         temp = Recursive.sequence(n)
@@ -50,7 +67,7 @@ class Recursive:
                 count -= 1
                 last[0] = Recursive.sequence()
                 last = last[0]
-        return temp
+        return temp.toArrayRecursively()
 print(Recursive.array(2,4))
 # Example binary matrices
 example = {
