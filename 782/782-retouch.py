@@ -135,6 +135,13 @@ class DimensionalPosition:
             end.append(0)
         self.current = end[::-1]
         return self.current
+    def go_to_d(self, d , to_arrive):
+        if to_arrive > 0:
+            self.go_to((self.n**d)*(to_arrive + 1))
+            return self.go_to(-1)
+        else:
+            return self.go_to(-(self.n**d)*abs(to_arrive))
+        
     def __next__(self):
         if not self.start:
             self.start = True
@@ -145,47 +152,54 @@ class DimensionalPosition:
 
 # For 0 <= k <= n^2, let c(n,k) be the minimum complexity of an n * n matrix with eactly k ones.
 def minimum(n, k):
-    # TODO:
-    # 
     void = np.zeros([n, n])
+    matrix_position = DimensionalPosition(2, n, 0)
     matrix_max = DimensionalPosition(2, n, n * n - 1)
     one_position = []
-    if k > 0:
-        one_position.append(matrix_max.current)
-        if k > 1:
-            count = k - 1
-            while count > 0:
-                count -= 1
-                one_position.append(matrix_max.go_to(-1))
+
+    relative_half = int(n/2)
+    count = k
+    while count > 0:
+        if count == k:
+            one_position.append(matrix_max.current)
+        else:
+            if count % 2 == 0 and count <= relative_half:
+                one_position.append(matrix_max.go_to_d(1, -1))
+            else:
+                if matrix_position.current[1] <= (n - relative_half) and matrix_position.current[0] <= (n - relative_half):
+                    one_position.append(next(matrix_position))
+                else:
+                    if matrix_position.current[0] >= relative_half:
+                        pass
+                    else:
+                        matrix_position.go_to_d(1,0)
+                        one_position.append(matrix_position.go_to(1))
+        count -= 1
     for pos in one_position:
-        if k == n:
-            return np.eye(n)
-        elif (k - n) == n:
-            temp = np.ones([n,n])
-            np.fill_diagonal(temp,0)
-            print(temp)
-            return temp
         Recursive.set_item(void, pos, 1)
-    return void
+    print(np.flipud(void))
+    return np.flip(void)
 
 
 def C(N):
     temp = 0
     for x in range(N**2 + 1):
-        print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
+        #print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
         temp += len(complexity(minimum(N, x)))
     return temp
 
 # print(C(5))
-
-print(complexity(
-    np.array(
-        [
-            [0,0,0,1],
-            [0,0,0,1],
-            [1,1,0,0],
-            [1,1,0,0],
-        ]
+minimum(5,25)
+""" print(
+    complexity(
+        np.array(
+            [
+                [0,0,0,0,1],
+                [0,0,0,0,1],
+                [0,0,0,0,1],
+                [1,1,1,1,0],
+                [1,1,1,1,1]
+            ]
+        )
     )
-))
-print(complexity(minimum(5,6)))
+) """
