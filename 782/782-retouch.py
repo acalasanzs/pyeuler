@@ -200,9 +200,9 @@ def minimum(n, k):
         count -= 1
     for pos in one_position:
         Recursive.set_item(void, pos, 1)
-    time.sleep(.3)
-    os.system("cls")
-    print(np.flipud(void))
+    # time.sleep(.3)
+    # os.system("cls")
+    # print(np.flipud(void))
     return np.flipud(void)
 
 
@@ -213,7 +213,7 @@ def C(N):
         temp += len(complexity(minimum(N, x)))
     return temp
 
-# print(C(5))
+print(C(5))
 print(
     complexity(
         np.array(
