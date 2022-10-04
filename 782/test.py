@@ -44,22 +44,19 @@ class Recursive:
         def toArrayRecursively(self):
             arr = self.toArray()
             index = 0
-            real_index = 0
-            current_position = [0]
+            current_position = [index]
             last = self
             while True:
                 try:
-                    last = last[current_position[index]]
-                    arr[current_position[index]] = last.toArray()
+                    last = last[current_position]
+                    arr[index] = last.toArray()
                     index += 1
                     current_position.append(0)
-                except AttributeError:
-                    if real_index == len(arr) - 1:
+                except:
+                    if index == len(arr) - 1:
                         break
-                    real_index += 1
-                    index = 0
-                    current_position = [0]
-                    last = self[index].toArray()
+                    index += 1
+                    current_position = [index]
                 
             return arr
                 
@@ -75,4 +72,3 @@ class Recursive:
                 last[0] = Recursive.sequence()
                 last = last[0]
         return temp.toArrayRecursively()
-print(Recursive.array(2,4))

@@ -2,74 +2,8 @@
 Made with love by Albert Calasanz Sallen in Python 3
 This time I'm going hard.
 """
-from heapq import nsmallest
-import itertools
-import math
-from multiprocessing.dummy import Array
-from turtle import goto
 import numpy as np
 
-class Recursive:
-    class sequence:
-        def __init__(self, *values):
-            self.current = "0"
-            self.len = 0
-            if len([*values]) == 0:
-                return
-            elif len([*values]) == 1:
-                for x in range(values[0]):
-                    setattr(self, self.current, Recursive.sequence())
-                    self.increase()
-            else:
-                self.push(*values)
-        def increase(self):
-            self.len = int(self.current) + 1
-            self.current = str(self.len)
-        def __setitem__(self, key, value):
-            setattr(self, str(key), value)
-        def __getitem__(self, item):
-            current = self
-            items = [x for x in (item if not type(item) == int else [item])]
-            for i,idx in enumerate(items):
-                current = getattr(current, str(idx))
-                if isinstance(current, Recursive.sequence) and i < (len(items) - 1):
-                    continue
-                return current
-        def push(self, *values):
-            for value in values:
-                setattr(self, self.current, value)
-                self.increase()
-        def toArray(self):
-            temp = []
-            for x in range(self.len):
-                temp.append(self[str(x)])
-            return temp
-        def toArrayRecursively(self):
-            arr = self.toArray()
-            index = 0
-            last = arr[index]
-            while True:
-                try:
-                    last = [x.toArray() for x in last]
-                except:
-                    if index == len(arr) - 1:
-                        break
-                    index += 1
-                    last = arr[index]
-    @staticmethod
-    def array(n,n2):
-        temp = Recursive.sequence(n)
-        for i in range(temp.len):
-            count = (n2 | n) - 2
-            temp[i] = Recursive.sequence()
-            last = temp[i]
-            while count > 0:
-                count -= 1
-                last[0] = Recursive.sequence()
-                last = last[0]
-        return temp.toArrayRecursively()
-print(Recursive.array(2,4))
-# Example binary matrices
 example = {
     "A" : np.array([
         [1,0,1],
@@ -115,5 +49,69 @@ def complexity(matrix):
     else:
         raise "not a ndarray"
 
-print(complexity(example["B"]))
-print(Recursive.array(4,2))
+# print(complexity(example["A"]))
+
+class DimensionalPosition:
+    def __init__(self, d, n, index = 2):
+        self.d = d
+        self.n = n
+        self.pos = [0 for x in range(d)]
+        self.start = False
+        self._index = index if type(index) is int else 0
+        #if index > 0: self.go_to(index)
+        self.current = self.__getitem__(self._index)
+    def __iter__(self):
+        return self
+    def __getitem__(self, item):
+        def convert_base(num, base):
+            last = num
+            result = []
+            while True:
+                calc = int(last / base)
+                result.append(last%base)
+                last = calc
+                if calc == 0:
+                    break
+            return result
+        result = convert_base(item, self.n)
+        while len(result) < self.d:
+            result.append(0)
+        if len(result) > self.d:
+            raise IndexError
+        else:
+            return result[::-1]
+            
+    def go_to(self, to_arrive):
+        while to_arrive > 0:
+            if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+                self.x = 0
+                if self.y < self.n:
+                    self.y += 1
+                else:
+                    raise StopIteration
+            self.x += 1
+            self._index += 1
+            to_arrive -= 1
+    def __next__(self):
+        if not self.start:
+            self.start = True
+            return self.current
+        if self.x == self.n:                             #If x exceeds the last index, reset x and increase y if it's not the last index of y
+            self.x = 0
+            if self.y < self.n:
+                self.y += 1
+            else:
+                raise StopIteration
+        else:
+            self.x += 1
+        self._index += 1
+        self.current = [self.x, self.y]
+        return self.current
+
+
+# For 0 <= k <= n^2, let c(n,k) be the minimum complexity of an n * n matrix with eactly k ones.
+#def minimum(n, k):
+    # TODO:
+    # 
+
+pos = DimensionalPosition(3,5)
