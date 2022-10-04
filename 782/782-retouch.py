@@ -6,6 +6,32 @@ from email.mime import base
 from time import struct_time
 import numpy as np
 
+class Recursive:
+    @staticmethod
+    def set_item(obj, indices, new):
+        if not type(obj).__module__ == 'numpy':
+            raise "Not a NumPy Array"
+        
+        index = 0
+        last = obj
+        while index < len(indices) - 1:
+            last = last[indices[index]]
+            index += 1
+        last[indices[-1]] = new
+    @staticmethod
+    def get_item(obj, indices):
+        if not type(obj).__module__ == 'numpy':
+            raise "Not a NumPy Array"
+        
+        index = 0
+        last = obj
+        while index < len(indices):
+            last = last[indices[index]]
+            index += 1
+        return last
+
+
+
 example = {
     "A" : np.array([
         [1,0,1],
@@ -16,6 +42,7 @@ example = {
         [0,0,0],
         [1,1,1]])
 }
+
 #returns the columns as an 2d array (such as a rerversed 2D matrix)
 def columns(array):
     t = [[] for _ in array[0]]                      #Prepares a void 2d array
@@ -120,13 +147,18 @@ class DimensionalPosition:
 def minimum(n, k):
     # TODO:
     # 
-    void = np.empty([n, n])
-    matrix_position = DimensionalPosition(2, n)
+    void = np.zeros([n, n])
     matrix_max = DimensionalPosition(2, n, n * n - 1)
-    one_position = []
-    for x in matrix_position:
-        print(x)
+    one_position = [matrix_max.current]
     for one in range(k):
         one_position.append(matrix_max.go_to(-1))
-    print(one_position)
-minimum(5,3)
+    for pos in one_position:
+        Recursive.set_item(void, pos, 1)
+    return np.flipud(void)
+
+
+print(
+    complexity(
+        minimum(5,3)
+    )
+)
