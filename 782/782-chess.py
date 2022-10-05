@@ -83,7 +83,7 @@ def complexity(matrix):
 # print(complexity(example["A"]))
 class Map:
     def __init__(self, **variables):
-        self.keys = np.array([x for x in range(len(variables.items()))], dtype=str)
+        self.keys = np.array([x for x in range(len(variables.items()))], dtype=np.dtype('U50'))
         self.values = np.array([None for x in range(len(variables.items()))])
         i = 0
         for key, value in variables.items():
@@ -92,14 +92,14 @@ class Map:
             i += 1
     def append(self, **values):
         for key, value in values.items():
-            self.values[np.where(self.keys == key)].append(value)
+            self.values[np.where(self.keys == key)][0].append(value)
     def pop(self, **values):
         for key, index in values.items():
             self.values[np.where(self.keys == key)][0].pop(index)
     def __getitem__(self, item):
-        return self.values[np.where(self.keys == item)]
+        return self.values[np.where(self.keys == item)][0]
     def __setitem__(self, item, value):
-        self.values[np.where(self.keys == item)] = value
+        self.values[np.where(self.keys == item)][0] = value
     @property
     def data(self):
         return [[key, value] for key, value in zip(self.keys, self.values)]
@@ -200,15 +200,8 @@ def minimum(n, k):
 
     count = 1
 
-    class complexity_point:
-        def __init__(self):
-            self.complexity_values = []
-            self.position = []
-        def add(self, complexity_value, position):
-            self.complexity_values.append(complexity_value)
-            self.position.append(position)
-        # def min(self):
-        #     return self.position[index of complety_value]
+    complexity_points = Map('complexity', 'position')
+    print(complexity_points.data)
 
     one_position.append(density_ones[0])
     while count < k:
@@ -238,9 +231,6 @@ def C(N):
     return temp
 
 # print(C(5))
-a = Map(a=[1,4],b=2,c=3)
-a.pop(a=-1)
-print(a.data)
 print(
     complexity(
         np.array(
