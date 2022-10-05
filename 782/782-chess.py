@@ -165,7 +165,7 @@ def minimum(n, k):
     matrix_position = DimensionalPosition(2, n, 0)
     matrix_max = DimensionalPosition(2, n, n * n - 1)
     one_position = []
-
+    # density = sum([1 if chess_position([0, x], n) else 0 for x in range(n)])/n
     count = 0
     while count < k:
         try:
@@ -185,7 +185,7 @@ def minimum(n, k):
 def C(N):
     temp = 0
     for x in range(N**2 + 1):
-        print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
+        # print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
         temp += len(complexity(minimum(N, x)))
     return temp
 
