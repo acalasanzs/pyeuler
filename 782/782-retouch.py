@@ -50,17 +50,15 @@ def columns(array):
         for row in range(len(array)):               #For each row
             t[column].append(array[row][column])    #Append to current value to the current column index
     return t
-
+#calculates if there is a match for arrays inside an array
+def setin(array,arr):
+    for a in array:
+        if np.array_equal(a,arr) or np.array_equal(a[::-1],arr):
+            return True
+    return False
 # Complexity binary matrix calculator
 def complexity(matrix):
     n = len(matrix)                                     #matrix size, as a 0-cube (square)
-
-    #calculates if there is a match for arrays inside an array
-    def setin(array,arr):
-        for a in array:
-            if np.array_equal(a,arr) or np.array_equal(a[::-1],arr):
-                return True
-        return False
 
     #Here comes the work
     if type(matrix) is np.ndarray:                      #check if It's a 2d np matrix
@@ -165,15 +163,18 @@ def minimum(n, k):
     changed = False
     done = False
     my_turn_up = False
-    dangerous_range = [(n - 1) - x for x in range(0, relative_half - 1)]
+    dangerous_range = [[x, (n - 1) - x] for x in range(0, relative_half - 1)]
+    print(dangerous_range)
     while count > 0:
         if count == k:
             one_position.append(matrix_max.current)
         else:
             if count % 2 == 0 and count <= relative_half:
-                one_position.append(matrix_max.go_to_d(1, -1))
+                matrix_max.go_to_d(1, -1)
+                if not setin(dangerous_range, matrix_max.current):                          
+                    one_position.append(matrix_max.current)
             else:
-                if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed  and not matrix_position.current[1] in dangerous_range:
+                if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed :
                     one_position.append(next(matrix_position))
                 else:
                     if matrix_position.current[0] >= relative_half:
@@ -208,12 +209,12 @@ def minimum(n, k):
 
 def C(N):
     temp = 0
-    for x in range(13, N**2 + 1):
+    for x in range(0, N**2 + 1):
         print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
         temp += len(complexity(minimum(N, x)))
     return temp
 
-print(C(5))
+print(C(6))
 print(
     complexity(
         np.array(

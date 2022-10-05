@@ -217,7 +217,6 @@ def minimum(n, k):
             Recursive.set_item(void, pos, 1)
         return complexity(void)
 
-    count = 0
 
     complexity_points = Map(complexity = [], position = [])
     def show():
@@ -241,16 +240,24 @@ def minimum(n, k):
         one_position.pop()
         return min_complexity
     min_complexity = refresh(density_ones[0])
-    while count < k:
-        void = last_void
-        for pos in density_ones:
-            complexity_point = refresh(min_complexity['position'])
-            complexity_point_i = refresh(pos)
-            if len(complexity_point_i['complexity']) < len(complexity_point['complexity']):
-                min_complexity = complexity_point
-                one_position.append(pos)
+    void = last_void
+    for pos in density_ones:
+        complexity_point = refresh(min_complexity['position'])
+        complexity_point_i = refresh(pos)
+        if len(complexity_point_i['complexity']) < len(complexity_point['complexity']):
+            min_complexity = complexity_point
+            one_position.append(pos)
         last_void = void
-        count += 1
+    else:
+
+        """ 
+        Bruteforce since chess algorithm is over
+        """
+
+        count = 0
+        void = np.zeros([n, n])
+        while count < k:
+            count += 1
     update()
     # time.sleep(.2)
     # os.system("cls")
