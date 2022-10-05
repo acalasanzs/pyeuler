@@ -207,7 +207,16 @@ def minimum(n, k):
     count = 1
 
     complexity_points = Map(complexity = [], position = [])
+    def show():
+        for i, value in enumerate(complexity_points.values[0]):
+            print(complexity_points.keys[1]+":")
+            print(complexity_points.values[1][i], end="\n-")
 
+            print(complexity_points.keys[0] + ": " + str(len(value)), end="\n")
+            for c in value:
+                print("-".join([str(int(x)) for x in c]), end=" | ")
+            print("\n\n")
+                
     one_position.append(density_ones[0])
     while count < k:
         for one in density_ones:
@@ -215,15 +224,7 @@ def minimum(n, k):
             complexity_points.append(complexity = update(), position = one)
             one_position.pop()
         else:
-            for i, key in enumerate(complexity_points.keys):
-                print(key, end="\n")
-
-                if key == 'complexity':
-                    for c in complexity_points[key][i]:
-                        print("-".join([str(int(x)) for x in c]), end=" | ")
-                    print(len(complexity_points[key][i]))
-                else:
-                    print(complexity_points[key][i])
+            show()
             break
         count += 1
 
