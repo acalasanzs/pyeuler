@@ -4,7 +4,6 @@ This time I'm going hard.
 """
 import os
 import time
-from turtle import pos, position
 import numpy as np
 
 class Recursive:
