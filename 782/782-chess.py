@@ -52,17 +52,15 @@ def columns(array):
         for row in range(len(array)):               #For each row
             t[column].append(array[row][column])    #Append to current value to the current column index
     return t
-
+#calculates if there is a match for arrays inside an array
+def setin(array,arr):
+    for a in array:
+        if np.array_equal(a,arr) or np.array_equal(a[::-1],arr):
+            return True
+    return False
 # Complexity binary matrix calculator
 def complexity(matrix):
     n = len(matrix)                                     #matrix size, as a 0-cube (square)
-
-    #calculates if there is a match for arrays inside an array
-    def setin(array,arr):
-        for a in array:
-            if np.array_equal(a,arr) or np.array_equal(a[::-1],arr):
-                return True
-        return False
 
     #Here comes the work
     if type(matrix) is np.ndarray:                      #check if It's a 2d np matrix
@@ -85,6 +83,7 @@ class Map:
     def __init__(self, **variables):
         self.keys = np.array([x for x in range(len(variables.items()))], dtype=np.dtype('U50'))
         self.values = np.array([None for x in range(len(variables.items()))])
+        self.index = -1
         i = 0
         for key, value in variables.items():
             self.keys[i] = key
@@ -96,8 +95,19 @@ class Map:
     def pop(self, **values):
         for key, index in values.items():
             self.values[np.where(self.keys == key)][0].pop(index)
+    def __iter__(self):
+        return self
+    def __next__(self):
+        self.index += 1
+        return self.__getitem__(self.index)
     def __getitem__(self, item):
-        return self.values[np.where(self.keys == item)][0]
+        total = {}
+        try:
+            for i, key in enumerate(self.keys):
+                total[key] = self.values[i][item]
+            return total
+        except IndexError:
+            raise StopIteration
     def __setitem__(self, item, value):
         self.values[np.where(self.keys == item)][0] = value
     @property
@@ -204,7 +214,7 @@ def minimum(n, k):
             Recursive.set_item(void, pos, 1)
         return complexity(void)
 
-    count = 1
+    count = 0
 
     complexity_points = Map(complexity = [], position = [])
     def show():
@@ -224,10 +234,15 @@ def minimum(n, k):
             complexity_points.append(complexity = update(), position = one)
             one_position.pop()
         else:
-            show()
-            break
+            min_complexity = complexity_points[0]
+            for point in complexity_points:
+                complexity_value = len(point['complexity'])
+                if complexity_value < len(min_complexity['complexity']) and not setin(one_position, point['position']):
+                    min_complexity = point
+            one_position.append(min_complexity['position'])
         count += 1
-
+    print(one_position)
+    update()
     # time.sleep(1.2)
     # os.system("cls")
     # print(np.flipud(void))
@@ -242,7 +257,7 @@ def C(N):
     return temp
 
 # print(C(5))
-minimum(5,5)
+print(minimum(5,5))
 print(
     complexity(
         np.array(
