@@ -98,7 +98,7 @@ class Map:
     def __iter__(self):
         return self
     def __len__(self):
-        return self.keys.size[0]
+        return self.keys.size
     def __next__(self):
         self.index += 1
         return self.__getitem__(self.index)
@@ -245,7 +245,7 @@ def minimum(n, k):
                     elif i == len(complexity_points) - 1:
                         min_index += 1
                         min_complexity = complexity_points[min_index]
-                        loop()
+                        loop(min_complexity, min_index)
                 else:
                     print(min_complexity["position"])
                     last = min_complexity['position']
