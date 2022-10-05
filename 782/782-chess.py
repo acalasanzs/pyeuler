@@ -4,7 +4,7 @@ This time I'm going hard.
 """
 import os
 import time
-from turtle import pos
+from turtle import pos, position
 import numpy as np
 
 class Recursive:
@@ -90,15 +90,16 @@ class Map:
             self.values[i] = value
             i += 1
     def append(self, **values):
-        for key, value in values.items():
+        for key, value in values.items(): 
             self.values[np.where(self.keys == key)][0].append(value)
+        return self.__getitem__(len(self) - 1)
     def pop(self, **values):
         for key, index in values.items():
             self.values[np.where(self.keys == key)][0].pop(index)
     def __iter__(self):
         return self
     def __len__(self):
-        return self.keys.size
+        return len(self.values[0])
     def __next__(self):
         self.index += 1
         return self.__getitem__(self.index)
@@ -114,9 +115,11 @@ class Map:
         self.values[np.where(self.keys == item)][0] = value
     @property
     def data(self):
+        if len(self) == 0:
+            return None
         for i, key in enumerate(self.keys):
             print(key, end="\n")
-            print(", ".join(self.values[i][0]), end="\n\n")
+            print(", ".join([str(x) for x in self.values[i][0]]), end="\n\n")
 class DimensionalPosition:
     def __init__(self, d, n, index = 0):
         self.d = d                                                      #Dimension which defines the length of the index array
@@ -230,34 +233,16 @@ def minimum(n, k):
                 
     one_position.append(density_ones[0])
     while count < k:
-        for one in density_ones:
-            one_position.append(one)
-            complexity_points.append(complexity = update(), position = one)
-            one_position.pop()
-        else:
-            min_complexity = complexity_points[0]
-            min_index = 0
-            def loop(min_complexity, min_index):
-                for i, point in enumerate(complexity_points):
-                    complexity_value = len(point['complexity'])
-                    if complexity_value < len(min_complexity['complexity']) and not setin(one_position, point['position']):
-                        min_complexity = point
-                    elif i == len(complexity_points) - 1:
-                        min_index += 1
-                        min_complexity = complexity_points[min_index]
-                        loop(min_complexity, min_index)
-                else:
-                    print(min_complexity["position"])
-                    last = min_complexity['position']
-                    i = 0
-                    while setin(one_position, min_complexity['position']):
-                        try:
-                            min_complexity = complexity_points[i]
-                            i += 1
-                        except StopIteration:
-                            break
-            loop(min_complexity, min_index)
-            one_position.append(min_complexity['position'])
+        def loop(min_complexity):
+            pass
+        print(complexity_points.data)
+        print(density_pos[0])
+        one_position.append(density_pos[0])
+        min_complexity = complexity_points.append(complexity = update(), position = density_pos[0])
+        print(min_complexity)
+        while True:
+            break
+            loop(min_complexity)
         count += 1
     void = np.zeros([n, n])
     update()
