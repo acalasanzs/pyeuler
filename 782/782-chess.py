@@ -239,13 +239,22 @@ def minimum(n, k):
                 complexity_value = len(point['complexity'])
                 if complexity_value < len(min_complexity['complexity']) and not setin(one_position, point['position']):
                     min_complexity = point
+            else:
+                last = min_complexity['position']
+                i = 0
+                while setin(one_position, min_complexity['position']):
+                    try:
+                        min_complexity = complexity_points[i]
+                        i += 1
+                    except StopIteration:
+                        break
             one_position.append(min_complexity['position'])
         count += 1
-    print(one_position)
+    void = np.zeros([n, n])
     update()
-    # time.sleep(1.2)
-    # os.system("cls")
-    # print(np.flipud(void))
+    time.sleep(.2)
+    os.system("cls")
+    print(np.flipud(void))
     return np.flipud(void)
 
 
@@ -256,8 +265,8 @@ def C(N):
         temp += len(complexity(minimum(N, x)))
     return temp
 
-# print(C(5))
-print(minimum(5,5))
+print(C(5))
+# print(minimum(5,5))
 print(
     complexity(
         np.array(
