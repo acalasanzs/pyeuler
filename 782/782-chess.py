@@ -4,6 +4,7 @@ This time I'm going hard.
 """
 import os
 import time
+from turtle import pos
 import numpy as np
 
 class Recursive:
@@ -80,7 +81,28 @@ def complexity(matrix):
         raise "not a ndarray"
 
 # print(complexity(example["A"]))
-
+class Map:
+    def __init__(self, **variables):
+        self.keys = np.array([x for x in range(len(variables.items()))], dtype=str)
+        self.values = np.array([None for x in range(len(variables.items()))])
+        i = 0
+        for key, value in variables.items():
+            self.keys[i] = key
+            self.values[i] = value
+            i += 1
+    def append(self, **values):
+        for key, value in values.items():
+            self.values[np.where(self.keys == key)].append(value)
+    def pop(self, **values):
+        for key, index in values.items():
+            self.values[np.where(self.keys == key)][0].pop(index)
+    def __getitem__(self, item):
+        return self.values[np.where(self.keys == item)]
+    def __setitem__(self, item, value):
+        self.values[np.where(self.keys == item)] = value
+    @property
+    def data(self):
+        return [[key, value] for key, value in zip(self.keys, self.values)]
 class DimensionalPosition:
     def __init__(self, d, n, index = 0):
         self.d = d                                                      #Dimension which defines the length of the index array
@@ -165,17 +187,43 @@ def minimum(n, k):
     matrix_position = DimensionalPosition(2, n, 0)
     matrix_max = DimensionalPosition(2, n, n * n - 1)
     one_position = []
-    # density = sum([1 if chess_position([0, x], n) else 0 for x in range(n)])/n
-    count = 0
+
+    density_pos = DimensionalPosition(2, n)
+    density_ones = []
+    density = 0
+    for x in density_pos:
+        if(chess_position(x, n)):
+            density_ones.append(x)
+            density += 1
+    density /= n*n
+
+
+    count = 1
+
+    class complexity_point:
+        def __init__(self):
+            self.complexity_values = []
+            self.position = []
+        def add(self, complexity_value, position):
+            self.complexity_values.append(complexity_value)
+            self.position.append(position)
+        # def min(self):
+        #     return self.position[index of complety_value]
+
+    one_position.append(density_ones[0])
     while count < k:
-        try:
-            if chess_position(next(matrix_position), n):
-                one_position.append(matrix_position.current)
-                count += 1
-        except StopIteration:
-            break # all chess tables done
-    for pos in one_position:
-        Recursive.set_item(void, pos, 1)
+        min_complexity = complexity_points()
+        for one in density_ones:
+            one_position.append(one)
+            complexity_points.append(update(), one)
+            one_position.pop()
+        else:
+            pass
+        count += 1
+    def update():
+        for pos in one_position:
+            Recursive.set_item(void, pos, 1)
+        return complexity(void)
     # time.sleep(1.2)
     # os.system("cls")
     # print(np.flipud(void))
@@ -189,7 +237,10 @@ def C(N):
         temp += len(complexity(minimum(N, x)))
     return temp
 
-print(C(5))
+# print(C(5))
+a = Map(a=[1,4],b=2,c=3)
+a.pop(a=-1)
+print(a.data)
 print(
     complexity(
         np.array(
