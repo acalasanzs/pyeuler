@@ -102,7 +102,9 @@ class Map:
         self.values[np.where(self.keys == item)][0] = value
     @property
     def data(self):
-        return [[key, value] for key, value in zip(self.keys, self.values)]
+        for i, key in enumerate(self.keys):
+            print(key, end="\n")
+            print(", ".join(self.values[i][0]), end="\n\n")
 class DimensionalPosition:
     def __init__(self, d, n, index = 0):
         self.d = d                                                      #Dimension which defines the length of the index array
@@ -197,26 +199,34 @@ def minimum(n, k):
             density += 1
     density /= n*n
 
-
-    count = 1
-
-    complexity_points = Map('complexity', 'position')
-    print(complexity_points.data)
-
-    one_position.append(density_ones[0])
-    while count < k:
-        min_complexity = complexity_points()
-        for one in density_ones:
-            one_position.append(one)
-            complexity_points.append(update(), one)
-            one_position.pop()
-        else:
-            pass
-        count += 1
     def update():
         for pos in one_position:
             Recursive.set_item(void, pos, 1)
         return complexity(void)
+
+    count = 1
+
+    complexity_points = Map(complexity = [], position = [])
+
+    one_position.append(density_ones[0])
+    while count < k:
+        for one in density_ones:
+            one_position.append(one)
+            complexity_points.append(complexity = update(), position = one)
+            one_position.pop()
+        else:
+            for i, key in enumerate(complexity_points.keys):
+                print(key, end="\n")
+
+                if key == 'complexity':
+                    for c in complexity_points[key][i]:
+                        print("-".join([str(int(x)) for x in c]), end=" | ")
+                    print(len(complexity_points[key][i]))
+                else:
+                    print(complexity_points[key][i])
+            break
+        count += 1
+
     # time.sleep(1.2)
     # os.system("cls")
     # print(np.flipud(void))
@@ -231,6 +241,7 @@ def C(N):
     return temp
 
 # print(C(5))
+minimum(5,5)
 print(
     complexity(
         np.array(
