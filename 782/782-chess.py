@@ -231,20 +231,27 @@ def minimum(n, k):
                 print("-".join([str(int(x)) for x in c]), end=" | ")
             print("\n\n")
                 
-    one_position.append(density_ones[0])
+    complexity_points.append(complexity = update(), position = density_ones[0])
+
+    last_void = void
+    def refresh(pos):
+        if pos is None:
+            pos = density_ones[0]
+        one_position.append(pos)
+        min_complexity = complexity_points.append(complexity = update(), position = pos)
+        one_position.pop()
+        return min_complexity
+    min_complexity = refresh(density_ones[0])
     while count < k:
-        def loop(min_complexity):
-            pass
-        print(complexity_points.data)
-        print(density_pos[0])
-        one_position.append(density_pos[0])
-        min_complexity = complexity_points.append(complexity = update(), position = density_pos[0])
-        print(min_complexity)
-        while True:
-            break
-            loop(min_complexity)
+        void = last_void
+        for pos in density_ones:
+            complexity_point = refresh(min_complexity['position'])
+            complexity_point_i = refresh(pos)
+            if len(complexity_point_i['complexity']) < len(complexity_point['complexity']):
+                min_complexity = complexity_point
+                one_position.append(pos)
+        last_void = void
         count += 1
-    void = np.zeros([n, n])
     update()
     # time.sleep(.2)
     # os.system("cls")
@@ -261,7 +268,7 @@ def C(N):
 
 # print(C(5))
 print(minimum(5,12))
-print(
+""" print(
     complexity(
         np.array(
             [
@@ -288,4 +295,4 @@ print(
             ]
         )
     )
-)
+) """
