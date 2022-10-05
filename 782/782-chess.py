@@ -97,6 +97,8 @@ class Map:
             self.values[np.where(self.keys == key)][0].pop(index)
     def __iter__(self):
         return self
+    def __len__(self):
+        return self.keys.size[0]
     def __next__(self):
         self.index += 1
         return self.__getitem__(self.index)
@@ -208,7 +210,6 @@ def minimum(n, k):
             density_ones.append(x)
             density += 1
     density /= n*n
-
     def update():
         for pos in one_position:
             Recursive.set_item(void, pos, 1)
@@ -235,26 +236,34 @@ def minimum(n, k):
             one_position.pop()
         else:
             min_complexity = complexity_points[0]
-            for point in complexity_points:
-                complexity_value = len(point['complexity'])
-                if complexity_value < len(min_complexity['complexity']) and not setin(one_position, point['position']):
-                    min_complexity = point
-            else:
-                last = min_complexity['position']
-                i = 0
-                while setin(one_position, min_complexity['position']):
-                    try:
-                        min_complexity = complexity_points[i]
-                        i += 1
-                    except StopIteration:
-                        break
+            min_index = 0
+            def loop(min_complexity, min_index):
+                for i, point in enumerate(complexity_points):
+                    complexity_value = len(point['complexity'])
+                    if complexity_value < len(min_complexity['complexity']) and not setin(one_position, point['position']):
+                        min_complexity = point
+                    elif i == len(complexity_points) - 1:
+                        min_index += 1
+                        min_complexity = complexity_points[min_index]
+                        loop()
+                else:
+                    print(min_complexity["position"])
+                    last = min_complexity['position']
+                    i = 0
+                    while setin(one_position, min_complexity['position']):
+                        try:
+                            min_complexity = complexity_points[i]
+                            i += 1
+                        except StopIteration:
+                            break
+            loop(min_complexity, min_index)
             one_position.append(min_complexity['position'])
         count += 1
     void = np.zeros([n, n])
     update()
-    time.sleep(.2)
-    os.system("cls")
-    print(np.flipud(void))
+    # time.sleep(.2)
+    # os.system("cls")
+    # print(np.flipud(void))
     return np.flipud(void)
 
 
@@ -265,8 +274,8 @@ def C(N):
         temp += len(complexity(minimum(N, x)))
     return temp
 
-print(C(5))
-# print(minimum(5,5))
+# print(C(5))
+print(minimum(5,12))
 print(
     complexity(
         np.array(
