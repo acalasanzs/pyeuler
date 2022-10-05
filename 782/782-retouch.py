@@ -165,6 +165,7 @@ def minimum(n, k):
     changed = False
     done = False
     my_turn_up = False
+    dangerous_range = [(n - 1) - x for x in range(0, relative_half - 1)]
     while count > 0:
         if count == k:
             one_position.append(matrix_max.current)
@@ -172,7 +173,7 @@ def minimum(n, k):
             if count % 2 == 0 and count <= relative_half:
                 one_position.append(matrix_max.go_to_d(1, -1))
             else:
-                if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed:
+                if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed  and not matrix_position.current[1] in dangerous_range:
                     one_position.append(next(matrix_position))
                 else:
                     if matrix_position.current[0] >= relative_half:
@@ -190,8 +191,8 @@ def minimum(n, k):
                                     changed = False
                         else:
                             one_position.append(matrix_max.go_to_d(1, -1))
-                            my_turn_up = not my_turn_up
                             if matrix_max.current[0] == 0 + 1:
+                                my_turn_up = not my_turn_up
                                 done = True
                     else:
                         matrix_position.go_to_d(1,0)
@@ -199,16 +200,16 @@ def minimum(n, k):
         count -= 1
     for pos in one_position:
         Recursive.set_item(void, pos, 1)
-    time.sleep(1.2)
-    os.system("cls")
-    print(np.flipud(void))
+    # time.sleep(.2)
+    # os.system("cls")
+    # print(np.flipud(void))
     return np.flipud(void)
 
 
 def C(N):
     temp = 0
-    for x in range(N**2 + 1):
-        # print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
+    for x in range(13, N**2 + 1):
+        print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
         temp += len(complexity(minimum(N, x)))
     return temp
 
@@ -217,12 +218,12 @@ print(
     complexity(
         np.array(
             [
-                [0,0,0,1,0,0],
-                [0,0,0,1,0,0],
                 [0,0,0,1,1,1],                              # 12 unos
-                [1,1,1,0,0,0],
-                [0,0,0,0,0,0],
-                [1,1,1,0,0,0],
+                [0,0,0,1,1,1],
+                [1,1,1,1,1,1],
+                [1,1,1,1,1,1],
+                [1,1,1,1,1,1],
+                [1,1,1,1,1,0],
             ]
         )
     )
