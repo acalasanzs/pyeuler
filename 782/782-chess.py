@@ -5,6 +5,7 @@ This time I'm going hard.
 import os
 import time
 import numpy as np
+from itertools import permutations
 
 class Recursive:
     @staticmethod
@@ -245,24 +246,39 @@ def minimum(n, k):
         complexity_point = refresh(min_complexity['position'])
         complexity_point_i = refresh(pos)
         if len(complexity_point_i['complexity']) < len(complexity_point['complexity']):
-            min_complexity = complexity_point
+            min_complexity = complexity_point_i
             one_position.append(pos)
-        last_void = void
+            last_void = void
     else:
 
         """ 
         Bruteforce since chess algorithm is over
         """
-
         count = 0
-        void = np.zeros([n, n])
-        while count < k:
-            count += 1
+        now = time.time()
+        one_position.clear()
+        min_matrix_complexity = None
+
+        length = 0
+        for matrix in permutations(matrix_position, k):
+            length += 1
+        print(length)
+        for matrix in permutations(matrix_position, k):
+            void = np.zeros([n, n])
+            one_position.extend(matrix)
+            current_complexity = len(update())
+            min_matrix_complexity = current_complexity if min_matrix_complexity is None else current_complexity if current_complexity < min_matrix_complexity else min_matrix_complexity
+            one_position.clear()
+
+        end = time.time()
+
+        print(f"Done in {end - now} seconds")
+        
     update()
     # time.sleep(.2)
     # os.system("cls")
     # print(np.flipud(void))
-    return np.flipud(void)
+    return void
 
 
 def C(N):
