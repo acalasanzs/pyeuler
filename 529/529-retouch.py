@@ -43,9 +43,7 @@ def T(n):
     for x in range(1, end + 1):
         if x % 100 == 0:
             os.system("cls")
-            print(f"{round((x/end)*100, 4)}%")
-        if is_10_substring_friendly(x):
-            print(x)
+            print(f"{round((x/end)*100, 10)}%")
         total += is_10_substring_friendly(x)
     return total
 
