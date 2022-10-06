@@ -163,41 +163,28 @@ def minimum(n, k):
     changed = False
     done = False
     my_turn_up = False
-    dangerous_range = [[x, (n - 1) - x] for x in range(0, relative_half - 1)]
-    print(dangerous_range)
     while count > 0:
-        if count == k:
-            one_position.append(matrix_max.current)
+        if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed :
+            one_position.append(next(matrix_position))
         else:
-            if count % 2 == 0 and count <= relative_half:
-                matrix_max.go_to_d(1, -1)
-                if not setin(dangerous_range, matrix_max.current):                          
-                    one_position.append(matrix_max.current)
-            else:
-                if matrix_position.current[1] < (n - relative_half) and matrix_position.current[0] <= (n - relative_half) and not changed :
-                    one_position.append(next(matrix_position))
+            if matrix_position.current[0] >= relative_half:
+                changed = True
+                condition = (my_turn_up) if not done else True
+                if condition:
+                    if actual > (n - relative_half + 1):
+                        my_turn_up = not my_turn_up
+                        actual = n - relative_half
+                        cactual += 1
+                        if cactual > n:
+                            changed = False
+                    matrix_position.current = [actual, n - cactual]
+                    one_position.append(matrix_position.go_to(-1))
+                    actual += 1
                 else:
-                    if matrix_position.current[0] >= relative_half:
-                        changed = True
-                        condition = (my_turn_up) if not done else True
-                        if condition:
-                            matrix_position.current = [actual, n - cactual]
-                            one_position.append(matrix_position.go_to(-1))
-                            actual += 1
-                            if actual > (n - relative_half + 1):
-                                my_turn_up = not my_turn_up
-                                actual = n - relative_half
-                                cactual += 1
-                                if cactual > n:
-                                    changed = False
-                        else:
-                            one_position.append(matrix_max.go_to_d(1, -1))
-                            if matrix_max.current[0] == 0 + 1:
-                                my_turn_up = not my_turn_up
-                                done = True
-                    else:
-                        matrix_position.go_to_d(1,0)
-                        one_position.append(matrix_position.go_to(relative_half))
+                    pass
+            else:
+                matrix_position.go_to_d(1,0)
+                one_position.append(matrix_position.go_to(relative_half))
         count -= 1
     for pos in one_position:
         Recursive.set_item(void, pos, 1)
@@ -209,27 +196,26 @@ def minimum(n, k):
 
 def C(N):
     temp = 0
-    for x in range(0, N**2 + 1):
-        print((N, x), "\n", minimum(N, x), "\n", complexity(minimum(N, x)), "\n\n")
+    for x in range(12, N**2 + 1):
+        print((N, x), "\n", minimum(N, x), "\n", len(complexity(minimum(N, x))), "\n\n")
         temp += len(complexity(minimum(N, x)))
     return temp
 
-print(C(6))
-print(
+print(C(5))
+""" print(
     complexity(
         np.array(
             [
-                [0,0,0,1,1,1],                              # 12 unos
-                [0,0,0,1,1,1],
-                [1,1,1,1,1,1],
-                [1,1,1,1,1,1],
-                [1,1,1,1,1,1],
-                [1,1,1,1,1,0],
+                [0,0,0,0,0],                              # 12 unos
+                [0,0,0,0,0],
+                [1,1,1,1,0],
+                [1,1,1,1,0],
+                [1,1,1,1,0],
             ]
         )
     )
-)
-print(
+) """
+""" print(
     complexity(
         np.array(
             [
@@ -242,4 +228,4 @@ print(
             ]
         )
     )
-)
+) """
