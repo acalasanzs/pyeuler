@@ -12,7 +12,9 @@ For example T(2) = 9 and T(5) = 3492.
 
 Find T(1018) mod 1 000 000 007.
 """
+from decimal import DivisionByZero
 import os
+import time
 def is_10_substring_friendly(number):
     string = str(number)
     total_indices_used = set()
@@ -40,11 +42,21 @@ def is_10_substring_friendly(number):
 def T(n):
     total = 0
     end = 10**n
+    last_progress = 0
+    now = time.time()
     for x in range(1, end + 1):
-        if x % 100 == 0:
+        if x % 1000 == 0:
+            end = time.time()
+            elapsed = end - now
             os.system("cls")
-            print(f"{round((x/end)*100, 10)}%")
+            progress = (x/end)*100
+            print(f"{round(progress, 10)}%", end="\n\n")
+            try:
+                print((progress-last_progress)/elapsed/60/60, "hours left")
+            except ZeroDivisionError:
+                print("Waiting...")
+            last_progress = progress
+            now = time.time()
         total += is_10_substring_friendly(x)
     return total
-
-print(T(5))
+print(T(10**18))
