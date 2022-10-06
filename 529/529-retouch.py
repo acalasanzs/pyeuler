@@ -45,18 +45,24 @@ def T(n):
     last_progress = 0
     now = time.time()
     for x in range(1, dest + 1):
-        if x % 1000 == 0:
+        if x % 100000 == 0:
             end = time.time()
             elapsed = end - now
             os.system("cls")
             progress = (x/dest)*100
             print(f"{round(progress, 10)}%", end="\n\n")
             try:
-                print((progress-last_progress)/elapsed/60/60, "hours left")
+                print(elapsed/(progress-last_progress), "hours total")
             except ZeroDivisionError:
                 print("Waiting...")
             last_progress = progress
             now = time.time()
         total += is_10_substring_friendly(x)
     return total
-print(T(10*18))
+
+results = []
+
+for number in range(1, 7):
+    results.append(T(number))
+else:
+    print(results)
