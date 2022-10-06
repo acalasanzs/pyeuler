@@ -12,8 +12,7 @@ For example T(2) = 9 and T(5) = 3492.
 
 Find T(1018) mod 1 000 000 007.
 """
-
-
+import os
 def is_10_substring_friendly(number):
     string = str(number)
     total_indices_used = set()
@@ -28,7 +27,7 @@ def is_10_substring_friendly(number):
     for length in range(2, len(string) + 1):
         for position in range(0, len(string)):
             if substring_10(length, position, string):
-                total_indices_used.update(range(position, position + length + 1))
+                total_indices_used.update(range(position, position + length))
     for pos in range(0, len(string)):
         if not pos in total_indices_used:
             break
@@ -36,13 +35,18 @@ def is_10_substring_friendly(number):
         return True
     return False
 
-# print(is_10_substring_friendly(37))
+# print(is_10_substring_friendly(73431))
 
 def T(n):
     total = 0
-    for x in range(1, 10**n + 1):
-        print(x, is_10_substring_friendly(x))
+    end = 10**n
+    for x in range(1, end + 1):
+        if x % 100 == 0:
+            os.system("cls")
+            print(f"{round((x/end)*100, 4)}%")
+        if is_10_substring_friendly(x):
+            print(x)
         total += is_10_substring_friendly(x)
     return total
 
-print(T(2))
+print(T(5))
