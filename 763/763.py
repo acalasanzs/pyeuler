@@ -53,20 +53,17 @@ class Map:
         self.values[np.where(self.keys == item)][0] = value
     @property
     def data(self):
+        data = ""
         if len(self) == 0:
             return None
-        for i, key in enumerate(self.keys):
-            print(key, end="\n")
-            print(", ".join([str(x) for x in self.values[i][0]]), end="\n\n")
-    def show(self):
-        for i, value in enumerate(self.values[0]):
-            print(self.keys[1]+":")
-            print(self.values[1][i], end="\n-")
-
-            print(self.keys[0] + ": " + str(len(value)), end="\n")
-            for c in value:
-                print("-".join([str(int(x)) for x in c]), end=" | ")
-            print("\n\n")
+        for i, value in enumerate(self.values):
+            for j, key in enumerate(self.keys):
+                if j == 0:
+                    data += key + "\ "
+                else:
+                    data += "\t"+key
+                data += str(self.values[j][0]) + "\n\n"
+        return data
 class DimensionalPosition:
     def __init__(self, d, n, index = 0):
         self.d = d                                                      #Dimension which defines the length of the index array
@@ -157,7 +154,7 @@ class Space:
     def add(self, amoeba):
         self.count += 1
         try:
-            if not isinstance(amoeba, Space.Amoeba):
+            if amoeba.__name__ == self.name:
                 amoeba = self.map.append(amoeba = self.count, position = list(amoeba))
             else:
                 self.map.add(amoeba)
@@ -167,4 +164,4 @@ class Space:
 
 map = Map("Amoeba", amoeba = [0], position = [[0,0,0]])
 map.add(map[0])
-map.show()
+print(map.data)
